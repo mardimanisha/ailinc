@@ -419,6 +419,5 @@ export const nav = [
   { label: "Company", href: "/#company" },
   { label: "Technology", href: "/#technology" },
   { label: "Education", href: "/#education" },
-  { label: "Platform", href: "/#platform" },
   { label: "Team", href: "/team" },
 ];
