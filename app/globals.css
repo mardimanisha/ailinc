@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   AI LINC — brand tokens
+   Extracted from public/logos/ai-linc-lockup-color.svg
+     gradient stop 0 : #2356D6   (linc blue)
+     gradient stop 1 : #00E0FF   (linc cyan)
+     wordmark ink    : #0A1228
+   Neutrals are deliberately off-black and off-white.
+------------------------------------------------------------------- */
+@theme {
+  --color-ink: #080b14;
+  --color-ink-2: #0c1120;
+  --color-ink-3: #131a2c;
+  --color-ink-4: #1c2440;
+
+  --color-paper: #f2f4fa;
+  --color-paper-2: #e8ecf7;
+  --color-paper-3: #dae1f1;
+
+  --color-brand: #2356d6;
+  --color-brand-2: #00e0ff;
+  --color-brand-deep: #0a1228;
+  --color-brand-soft: #6d94ff;
+
+  --font-display: var(--font-instrument), "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --brand-grad: linear-gradient(100deg, #2356d6 0%, #00e0ff 100%);
+}
+
+* {
+  border-color: color-mix(in srgb, var(--color-ink-4) 60%, transparent);
+}
+
+html {
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  /* `clip`, not `hidden` — `hidden` would make body a scroll container
+     and break the sticky hero. */
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-brand-2);
+  color: var(--color-brand-deep);
+}
+
+/* ---------------- typography helpers ---------------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.text-grad {
+  background: var(--brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------- scrollbar ---------------- */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ---------------- reveal primitives ---------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-reverse {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 38s linear infinite;
+}
+
+.animate-drift {
+  animation: drift 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-reverse,
+  .animate-drift {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------- surfaces ---------------- */
+.card-dark {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--color-ink-3) 92%, var(--color-brand) 8%),
+    var(--color-ink-2)
+  );
+  border: 1px solid color-mix(in srgb, var(--color-brand-soft) 14%, transparent);
+}
+
+.card-glow {
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--color-brand-2) 12%, transparent) inset,
+    0 30px 80px -40px color-mix(in srgb, var(--color-brand) 70%, transparent);
+}
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}

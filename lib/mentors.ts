@@ -1,0 +1,231 @@
+/**
+ * Trainer / mentor roster.
+ *
+ * Transcribed from the AI LINC mentor cards. `company` is only set where
+ * the source states a current employer — entries that only cite
+ * "Fortune 500 experience" are left without one rather than guessed.
+ */
+
+export type Mentor = {
+  name: string;
+  image: string;
+  role: string;
+  /** current employer, where stated */
+  company?: string;
+  /** employer's web domain, used to fetch their logo */
+  companyDomain?: string;
+  /** years of experience, as written on the source card */
+  yoe: string;
+  location?: string;
+  specialty: string;
+  note: string;
+  tier: "Trainer" | "Core mentor" | "Team member";
+  rating?: number;
+  mentees?: string;
+};
+
+export const mentors: Mentor[] = [
+  {
+    name: "Yamini Bandi",
+    image: "/trainers/yamini_bandi.jpg",
+    role: "SDE-2 & ML Engineer",
+    company: "Amazon",
+    companyDomain: "amazon.com",
+    yoe: "5 years",
+    location: "Hyderabad, India",
+    specialty: "ML Engineer",
+    note: "Developed ML models handling 1B+ daily predictions at Amazon.",
+    tier: "Trainer",
+    rating: 4.8,
+    mentees: "980+",
+  },
+  {
+    name: "Divyansh Dubey",
+    image: "/trainers/Divyansh_dubey.jpg",
+    role: "Gen AI Expert",
+    company: "Google",
+    companyDomain: "google.com",
+    yoe: "7 years",
+    location: "Bengaluru, India",
+    specialty: "Prompt & GenAI Expert",
+    note: "Created viral GenAI applications with 5M+ users at Google.",
+    tier: "Trainer",
+    rating: 4.7,
+    mentees: "850+",
+  },
+  {
+    name: "Abirami Sukumari",
+    image: "/trainers/Abirami_sukumari.jpg",
+    role: "Staff Developer Advocate",
+    company: "Google",
+    companyDomain: "google.com",
+    yoe: "20 years",
+    location: "Bengaluru, India",
+    specialty: "Cloud AI and Databases",
+    note: "22 years of experience with Fortune 500 companies.",
+    tier: "Trainer",
+    rating: 4.9,
+    mentees: "5000+",
+  },
+  {
+    name: "Dr. Sanjay Kulkarni",
+    image: "/team/sanjay_kulkarni.jpeg",
+    role: "Data & AI Transformation Leader",
+    yoe: "25+ years",
+    specialty: "Data & AI Educator",
+    note: "Fortune 500 experience with a practical, hands-on training approach.",
+    tier: "Team member",
+  },
+  {
+    name: "Anuj Garg",
+    image: "/team/anuj.jpeg",
+    role: "Engineering Manager",
+    company: "Gartner",
+    companyDomain: "gartner.com",
+    yoe: "10+ years",
+    specialty: "Full Stack & Cloud Architect",
+    note: "Gartner · Ex-Adobe, IBM, Allstate.",
+    tier: "Team member",
+  },
+  {
+    name: "Rajesh Talreja",
+    image: "/team/rajesh_talreja.jpeg",
+    role: "Product Development Lead",
+    yoe: "13+ years",
+    specialty: "Java & Microservices Expert",
+    note: "End-to-end product development expertise.",
+    tier: "Team member",
+  },
+  {
+    name: "Raghav Nakra",
+    image: "/team/raghav_nakra.jpg",
+    role: "Software Engineer",
+    company: "Microsoft",
+    companyDomain: "microsoft.com",
+    yoe: "3+ years",
+    location: "Delhi, India",
+    specialty: "Full Stack Development & DSA",
+    note: "ACM ICPC Regionalist · Topcoder Member. Mentored 200+ students in DSA and competitive programming. IIIT Delhi graduate.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Mahesh Yerra",
+    image: "/team/mahesh_yerra.jpg",
+    role: "Senior Software Engineer",
+    company: "Teradata",
+    companyDomain: "teradata.com",
+    yoe: "5+ years",
+    location: "Visakhapatnam, India",
+    specialty: "Backend Engineering & Full Stack Development",
+    note: "Ex-Amazon SDE (3+ yrs, Bengaluru). NIT Calicut graduate, B.Tech Computer Science.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Shivam Jindal",
+    image: "/team/shivam_jindal.jpg",
+    role: "Software Engineer",
+    company: "Airbnb",
+    companyDomain: "airbnb.com",
+    yoe: "4+ years",
+    location: "Gurugram, India",
+    specialty: "Software Engineering & Career Coaching",
+    note: "At Airbnb since Dec 2024. Top 5% mentor on Topmate, mentor at PrepInsta.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Ananth Kumar Vasamsetti",
+    image: "/team/ananth_kumar.jpg",
+    role: "Senior Member of Technical Staff",
+    company: "Salesforce",
+    companyDomain: "salesforce.com",
+    yoe: "10+ years",
+    location: "Hyderabad, India",
+    specialty: "Full Stack & Production Engineering",
+    note: "SMTS at Salesforce (Marketing Cloud R&D). Ex-Deliveroo, Ex-Microsoft, Ex-ServiceNow, Ex-eBay. MVGR College of Engineering graduate.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Rahul Mohan",
+    image: "/team/rahul_mohan.jpg",
+    role: "Senior Software Engineer",
+    company: "Egnyte",
+    companyDomain: "egnyte.com",
+    yoe: "6+ years",
+    location: "Bengaluru, India",
+    specialty: "Software Engineering & Cloud",
+    note: "At Egnyte since Oct 2024. Ex-Exotel SDE-II, Ex-Salesforce, Ex-HealthifyMe, Ex-Virtusa. NIT Puducherry graduate.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Sourov Roy",
+    image: "/team/sourov_roy.jpg",
+    role: "Senior Member of Technical Staff",
+    company: "Salesforce",
+    companyDomain: "salesforce.com",
+    yoe: "6+ years",
+    location: "Hyderabad, India",
+    specialty: "Distributed Systems & Software Engineering",
+    note: "SMTS at Salesforce since Dec 2025. Ex-Amazon Software Engineer (4+ yrs), Ex-Deliveroo. Jadavpur University graduate.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Shreyansh Sinha",
+    image: "/team/shreyansh_sinha.jpg",
+    role: "Software Engineer 2",
+    company: "Microsoft",
+    companyDomain: "microsoft.com",
+    yoe: "4+ years",
+    location: "Hyderabad, India",
+    specialty: "Software Development & DSA",
+    note: "SWE 2 at Microsoft. Ex-Siemens Healthineers, Ex-JP Morgan Chase. NIT Calicut graduate, HackerRank certified in problem solving.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Vivek Ananth",
+    image: "/team/vivek_ananth.jpg",
+    role: "Cloud Data & AI Engineer",
+    company: "CloudIBL Technologies",
+    companyDomain: "cloudibl.com",
+    yoe: "4+ years",
+    location: "Hyderabad, India",
+    specialty: "Data Science & AI Engineering",
+    note: "Google AI and Microsoft certified · Magna M Scholar. Data Scientist at Conversant (2+ yrs), mentor at Upscalar.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Shahar Banu",
+    image: "/team/shahar_banu.jpg",
+    role: "Senior DevOps Specialist",
+    company: "Equisoft",
+    companyDomain: "equisoft.com",
+    yoe: "17+ years",
+    location: "Hyderabad, India",
+    specialty: "Cloud, DevOps & AWS",
+    note: "At Equisoft since May 2023. Ex-AWS DevOps Engineer and keynote speaker (6 yrs). AWS certified · 5G evangelist · D&I advocate.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Ajeya B Jois",
+    image: "/team/ajeya_b_jois.jpg",
+    role: "Senior ML Scientist",
+    company: "PayPal",
+    companyDomain: "paypal.com",
+    yoe: "7 years",
+    location: "Bengaluru, India",
+    specialty: "Machine Learning & GenAI",
+    note: "XGBoost fraud detection at PayPal. Ex-Oracle Data Scientist 3, Ex-Qualcomm Data Scientist (3+ yrs). BITS Pilani graduate.",
+    tier: "Core mentor",
+  },
+  {
+    name: "Yash Mittal",
+    image: "/team/yash_mittal.jpg",
+    role: "Senior Consultant",
+    company: "Thoughtworks",
+    companyDomain: "thoughtworks.com",
+    yoe: "5+ years",
+    location: "India",
+    specialty: "Mobile & AI-First Development",
+    note: "At Thoughtworks since Jul 2025. AI-first developer with LLMs, Flutter and React. Open source contributor, Amrita Vishwa Vidyapeetham graduate.",
+    tier: "Core mentor",
+  },
+];
