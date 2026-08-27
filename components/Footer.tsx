@@ -155,8 +155,6 @@ export default function Footer() {
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-paper-2/35">
             <span>{company.name}</span>
-            <span>CIN {company.cin}</span>
-            <span>GSTIN {company.gstin}</span>
             <span>© {new Date().getFullYear()}</span>
           </div>
         </div>
