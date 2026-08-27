@@ -27,15 +27,18 @@ export default function Nav() {
             ))}
           </ul>
 
-          <Link href="/" className="relative grid h-11 w-16 place-items-center">
+          <Link href="/" className="relative flex items-center gap-2">
             <Image
               src="/logos/ai-linc-mark-color.svg"
               alt="AI LINC"
               width={64}
               height={38}
               priority
-              className="w-14"
+              className="w-10 sm:w-12"
             />
+            <span className="display text-sm font-semibold tracking-wide text-paper sm:text-base">
+              AI Linc
+            </span>
           </Link>
 
           <ul className="hidden items-center gap-6 pr-4 md:flex">

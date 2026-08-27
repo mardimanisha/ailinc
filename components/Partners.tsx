@@ -17,18 +17,27 @@ function LogoRow({
   logos: { name: string; image: string; dark?: boolean }[];
   reverse?: boolean;
 }) {
+  const shouldScroll = logos.length > 3;
+  const displayLogos = shouldScroll ? [...logos, ...logos] : logos;
+
   return (
     <div className="mt-12 first:mt-10">
       <Reveal>
         <p className="eyebrow text-center text-brand-deep/40">{label}</p>
       </Reveal>
-      <div className="relative mt-6 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
+      <div
+        className={
+          shouldScroll
+            ? "relative mt-6 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]"
+            : "relative mt-6"
+        }
+      >
         <div
-          className={`flex w-max items-center gap-14 ${
-            reverse ? "animate-marquee-reverse" : "animate-marquee"
+          className={`flex items-center gap-14 ${
+            shouldScroll ? `w-max ${reverse ? "animate-marquee-reverse" : "animate-marquee"}` : "w-full justify-center"
           }`}
         >
-          {[...logos, ...logos].map((p, i) => (
+          {displayLogos.map((p, i) => (
             <div
               key={`${p.name}-${i}`}
               className={
