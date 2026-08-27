@@ -137,10 +137,25 @@ body {
   animation: drift 7s ease-in-out infinite;
 }
 
+@keyframes scroll-cue {
+  0% {
+    transform: translate3d(0, 400%, 0);
+  }
+  60%,
+  100% {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+.animate-scroll-cue {
+  animation: scroll-cue 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-reverse,
-  .animate-drift {
+  .animate-drift,
+  .animate-scroll-cue {
     animation: none;
   }
   *,
