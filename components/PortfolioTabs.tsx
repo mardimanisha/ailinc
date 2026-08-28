@@ -59,7 +59,7 @@ export default function PortfolioTabs({ projects }: { projects: Project[] }) {
   const project = projects[index];
 
   return (
-    <div className="relative" style={{ height: `${projects.length * STEP_VH}vh` }}>
+    <div className="relative" style={{ height: `${projects.length * STEP_VH}svh` }}>
       {/* invisible scroll markers, one per project, driving the pin */}
       {projects.map((_, i) => (
         <div
@@ -68,11 +68,11 @@ export default function PortfolioTabs({ projects }: { projects: Project[] }) {
             stepRefs.current[i] = el;
           }}
           className="pointer-events-none absolute inset-x-0"
-          style={{ top: `${i * STEP_VH}vh`, height: `${STEP_VH}vh` }}
+          style={{ top: `${i * STEP_VH}svh`, height: `${STEP_VH}svh` }}
         />
       ))}
 
-      <div className="sticky top-28 flex h-[calc(100vh-7rem)] flex-col justify-center sm:top-32 sm:h-[calc(100vh-8rem)]">
+      <div className="sticky top-28 flex h-[calc(100svh-7rem)] flex-col justify-center sm:top-32 sm:h-[calc(100svh-8rem)]">
         {/* client tabs — single line, scrolling horizontally if it doesn't fit */}
         <div
           className="flex flex-nowrap items-center gap-2 overflow-x-auto px-2 pb-1 sm:justify-center sm:gap-2.5 [&::-webkit-scrollbar]:hidden"

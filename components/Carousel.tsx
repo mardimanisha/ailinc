@@ -147,11 +147,18 @@ export default function Carousel({
           </p>
         </div>
 
-        {/* sliding track — the negative right margin lets it run out to
-            the viewport edge on screens wider than the container */}
+        {/* mobile: a plain vertical stack, one card per row */}
+        <div className="flex flex-col gap-6 lg:hidden">
+          {slides.map((s, i) => (
+            <Card key={s.title} s={s} i={i} onActivate={setActive} />
+          ))}
+        </div>
+
+        {/* desktop: sliding track — the negative right margin lets it run
+            out to the viewport edge on screens wider than the container */}
         <div
           ref={trackRef}
-          className="min-w-0 flex-1 touch-pan-y overflow-hidden lg:mr-[min(0px,calc(620px-50vw))]"
+          className="hidden min-w-0 flex-1 touch-pan-y overflow-hidden lg:block lg:mr-[min(0px,calc(620px-50vw))]"
         >
           <motion.div
             className="flex"
@@ -160,55 +167,74 @@ export default function Carousel({
             transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
           >
             {slides.map((s, i) => (
-              <motion.article
+              <Card
                 key={s.title}
-                onHoverStart={() => setActive(i)}
-                onFocus={() => setActive(i)}
-                tabIndex={0}
-                animate={{ opacity: i < index ? 0.25 : 1 }}
-                transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
-                className="group relative h-[26rem] w-[19rem] shrink-0 overflow-hidden rounded-[22px] outline-none"
-              >
-                <CardVisual image={s.image} priority={i === 0} />
-
-                <div className="relative flex h-full flex-col justify-between p-6">
-                  <span className="inline-flex w-fit items-center gap-2 rounded-full bg-ink/55 px-3 py-1.5 eyebrow text-paper-2/85 ring-1 ring-white/10 backdrop-blur-md">
-                    <span
-                      className="size-1.5 rounded-full"
-                      style={{ background: "linear-gradient(100deg,#2356D6,#00E0FF)" }}
-                    />
-                    {s.tag}
-                  </span>
-
-                  <div>
-                    <h3 className="display text-[1.6rem] leading-tight text-paper">
-                      {s.title}
-                    </h3>
-                    <p className="mt-2 text-[0.78rem] leading-relaxed text-paper-2/65">
-                      {s.body}
-                    </p>
-
-                    {s.bullets && (
-                      <ul className="mt-4 space-y-2 border-t border-white/15 pt-3">
-                        {s.bullets.map((b) => (
-                          <li key={b.name}>
-                            <p className="text-[0.74rem] font-medium text-paper-2/90">
-                              {b.name}
-                            </p>
-                            <p className="text-[0.68rem] leading-snug text-paper-2/45">
-                              {b.detail}
-                            </p>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-              </motion.article>
+                s={s}
+                i={i}
+                onActivate={setActive}
+                fade={i < index}
+                className="w-[19rem] shrink-0"
+              />
             ))}
           </motion.div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Card({
+  s,
+  i,
+  onActivate,
+  fade = false,
+  className,
+}: {
+  s: Slide;
+  i: number;
+  onActivate: (i: number) => void;
+  fade?: boolean;
+  className?: string;
+}) {
+  return (
+    <motion.article
+      onHoverStart={() => onActivate(i)}
+      onFocus={() => onActivate(i)}
+      tabIndex={0}
+      animate={{ opacity: fade ? 0.25 : 1 }}
+      transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
+      className={clsx(
+        "group relative h-[26rem] w-full overflow-hidden rounded-[22px] outline-none",
+        className
+      )}
+    >
+      <CardVisual image={s.image} priority={i === 0} />
+
+      <div className="relative flex h-full flex-col justify-between p-6">
+        <span className="inline-flex w-fit items-center gap-2 rounded-full bg-ink/55 px-3 py-1.5 eyebrow text-paper-2/85 ring-1 ring-white/10 backdrop-blur-md">
+          <span
+            className="size-1.5 rounded-full"
+            style={{ background: "linear-gradient(100deg,#2356D6,#00E0FF)" }}
+          />
+          {s.tag}
+        </span>
+
+        <div>
+          <h3 className="display text-[1.6rem] leading-tight text-paper">{s.title}</h3>
+          <p className="mt-2 text-[0.78rem] leading-relaxed text-paper-2/65">{s.body}</p>
+
+          {s.bullets && (
+            <ul className="mt-4 space-y-2 border-t border-white/15 pt-3">
+              {s.bullets.map((b) => (
+                <li key={b.name}>
+                  <p className="text-[0.74rem] font-medium text-paper-2/90">{b.name}</p>
+                  <p className="text-[0.68rem] leading-snug text-paper-2/45">{b.detail}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </motion.article>
   );
 }

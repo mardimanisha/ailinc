@@ -48,8 +48,13 @@ body {
   color: var(--color-paper);
   font-family: var(--font-sans);
   /* `clip`, not `hidden` — `hidden` would make body a scroll container
-     and break the sticky hero. */
+     and break the sticky hero. `overflow-y: visible` is explicit because
+     leaving it unset makes it compute to `auto` (the UA pairs a non-visible
+     x-axis with an auto y-axis), which clips content that overflows
+     upward out of normal flow — e.g. vertically centered flex children
+     on short mobile viewports. */
   overflow-x: clip;
+  overflow-y: visible;
 }
 
 ::selection {
