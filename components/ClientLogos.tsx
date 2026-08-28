@@ -23,8 +23,8 @@ export default function ClientLogos() {
       </div>
 
       <div className="mt-12 flex flex-col gap-8">
-        <MarqueeRow logos={clientLogos.slice(0, 4)} duration={14} />
-        <MarqueeRow logos={clientLogos.slice(4)} duration={16} reverse />
+        <MarqueeRow logos={clientLogos} duration={22} />
+        <MarqueeRow logos={[...clientLogos].reverse()} duration={26} reverse />
       </div>
 
       <div className="mx-auto mt-20 max-w-[1240px] px-6 lg:px-10">
@@ -84,8 +84,9 @@ function MarqueeRow({
   duration: number;
   reverse?: boolean;
 }) {
-  // Duplicated once so the track can loop seamlessly at -50%.
-  const track = [...logos, ...logos];
+  // Duplicated so the track can loop seamlessly at -50%, tripled so the
+  // pattern still fills ultra-wide viewports without a visible seam.
+  const track = [...logos, ...logos, ...logos];
 
   return (
     <div
@@ -101,6 +102,7 @@ function MarqueeRow({
         className="flex w-max shrink-0 items-center gap-16 pr-16 [animation-play-state:running] group-hover:[animation-play-state:paused]"
         style={{
           animation: `${reverse ? "marquee-reverse" : "marquee"} ${duration}s linear infinite`,
+          willChange: "transform",
         }}
       >
         {track.map((c, i) => (
@@ -120,20 +122,23 @@ function MarqueeRow({
       </div>
 
       <style jsx>{`
+        /* Track is tripled, so shifting by exactly one third of its own
+           width lands on a pixel-identical repeat of the pattern — the
+           loop wraps with no visible seam or reset jump. */
         @keyframes marquee {
           from {
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
           }
           to {
-            transform: translateX(-50%);
+            transform: translate3d(-33.3333%, 0, 0);
           }
         }
         @keyframes marquee-reverse {
           from {
-            transform: translateX(-50%);
+            transform: translate3d(-33.3333%, 0, 0);
           }
           to {
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
           }
         }
       `}</style>
