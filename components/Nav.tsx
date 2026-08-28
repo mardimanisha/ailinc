@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useState } from "react";
@@ -14,35 +13,12 @@ import { nav } from "@/lib/content";
 export default function Nav() {
   const [open, setOpen] = useState(false);
 
-  const left = nav.slice(0, 2);
-  const right = nav.slice(2);
-
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-70 flex justify-center px-4 pt-5 sm:pt-7">
-        <nav className="flex items-center gap-2 rounded-full bg-ink-2/70 px-2 py-2 ring-1 ring-brand-soft/15 backdrop-blur-xl sm:gap-6 sm:px-3">
-          <ul className="hidden items-center gap-6 pl-4 md:flex">
-            {left.map((item) => (
-              <NavLink key={item.href} {...item} />
-            ))}
-          </ul>
-
-          <Link href="/" className="relative flex items-center gap-2">
-            <Image
-              src="/logos/ai-linc-mark-color.svg"
-              alt="AI LINC"
-              width={64}
-              height={38}
-              priority
-              className="w-10 sm:w-12"
-            />
-            <span className="display text-sm font-semibold tracking-wide text-paper sm:text-base">
-              AI Linc
-            </span>
-          </Link>
-
-          <ul className="hidden items-center gap-6 pr-4 md:flex">
-            {right.map((item) => (
+      <header className="fixed inset-x-0 top-0 z-70 flex justify-end px-4 pt-5 sm:pt-7">
+        <nav className="flex items-center gap-2 rounded-full bg-ink-2/70 px-4 py-2 ring-1 ring-brand-soft/15 backdrop-blur-xl sm:gap-6 sm:px-5">
+          <ul className="hidden items-center gap-6 md:flex">
+            {nav.map((item) => (
               <NavLink key={item.href} {...item} />
             ))}
             <li>

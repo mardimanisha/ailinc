@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Pill, Reveal, Tilt, Words } from "./ui";
-import Mentors from "./Mentors";
 import { founders } from "@/lib/content";
 
 export default function Team() {
@@ -53,9 +52,6 @@ export default function Team() {
             </Reveal>
           ))}
         </div>
-
-        <Mentors />
-
       </div>
     </section>
   );

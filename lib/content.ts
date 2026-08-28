@@ -12,14 +12,13 @@ export const company = {
   address: "AI Linc, Financial District, Hyderabad, Telangana 500032",
   phone: "+91 96939 41136",
   tech: { site: "ailinc.com", emails: ["shubham@ailinc.com", "sandeep@ailinc.com"] },
-  edu: { site: "ailinc.in", emails: ["shubham@ailinc.in"] },
 };
 
 export const heroCopy = {
   eyebrow: "Corporate Profile",
-  lines: ["One Company.", "Two Verticals."],
-  sub: "AILinc Technologies Pvt Ltd builds AI-native software for enterprises and AI-native learning infrastructure for institutions — engineered by the same team, delivered across six countries.",
-  cta: "Explore both verticals",
+  lines: ["Product engineering,", "secured end to end."],
+  sub: "AILinc Technologies Pvt Ltd builds and secures AI-native software for enterprise and public-sector clients — engineered by one delivery team, delivered across six countries.",
+  cta: "See capabilities",
 };
 
 export const countries = [
@@ -33,14 +32,13 @@ export const countries = [
 
 export const stats = [
   { value: 20, suffix: "+", label: "Products shipped" },
-  { value: 30, suffix: "+", label: "Education collaborations" },
-  { value: 10, suffix: "+", label: "Clients live on our LMS" },
+  { value: 6, suffix: "", label: "Countries of delivery" },
 ];
 
 export const whoWeAre = {
   eyebrow: "Who we are",
-  title: ["Engineering and education,", "built on one", "AI backbone"],
-  body: "AI LINC is a Hyderabad-based technology and learning company. Our Technology & Software Services vertical designs, builds and secures production systems for enterprise clients. Our Education & Institutional Learning vertical supplies trainers, curriculum and a white-label LMS to governments, universities and EdTech platforms. Both are led by founders with enterprise engineering backgrounds, and both draw on the same practitioner talent pool.",
+  title: ["Engineering, built on", "one", "AI backbone"],
+  body: "AI LINC is a Hyderabad-based technology company. We design, build and secure production systems for enterprise and public-sector clients, led by founders with enterprise engineering backgrounds and a single delivery team.",
   reach: {
     kicker: "Wherever you operate",
     scope: ["Any company", "Any domain", "Any segment", "Any country"],
@@ -50,34 +48,31 @@ export const whoWeAre = {
   },
 };
 
-export const verticals = [
-  {
-    index: "Vertical 01",
-    title: "Technology & Software Services",
-    body: "Product engineering, AI/ML systems, cybersecurity and GRC, data and cloud platforms — delivered as full builds, augmented squads or advisory engagements for enterprise and government clients.",
-    site: "ailinc.com",
-    href: "#technology",
-    action: "See capabilities",
-    featured: false,
-  },
-  {
-    index: "Vertical 02",
-    title: "Education & Institutional Learning",
-    body: "Trainers, mentors, curriculum design and a white-label AI-native LMS supplied strictly business-to-business and business-to-government — to institutions, platforms and corporate L&D teams.",
-    site: "ailinc.in",
-    href: "#education",
-    action: "See what we supply",
-    featured: true,
-  },
-  {
-    index: "The Platform",
-    title: "The AI LINC LMS",
-    body: "Adaptive, AI-native, white-label and multi-tenant — your brand and domain on the front, our intelligence layer underneath. One platform instance, many institutions.",
-    site: "ailinc.in",
-    href: "#platform",
-    action: "Inspect the stack",
-    featured: false,
-  },
+export const clientLogos = [
+  { name: "Accreqo", logo: "/logos/clients/accreqo.png" },
+  { name: "RTIH", logo: "/logos/clients/rtih.png" },
+  { name: "ZSkillup", logo: "/logos/clients/zskillup.png" },
+  { name: "Audix GRC", logo: "/logos/clients/audix-grc.png" },
+  { name: "Ulektz", logo: "/logos/clients/ulektz.png" },
+  { name: "S3CE Technology Solutions", logo: "/logos/clients/sage.png" },
+  { name: "University of Bahrain", logo: "/logos/clients/university-of-bahrain.png" },
+  { name: "Jaro Education", logo: "/logos/clients/jaro-education.png" },
+];
+
+export const productionLogos = [
+  { name: "AgileOlogy", logo: "/logos/partners/trust/agileology.webp" },
+  { name: "AIMERZ.ai", logo: "/logos/partners/trust/aimerz.png" },
+  { name: "Impacteers", logo: "/logos/partners/impacteers.svg" },
+  { name: "Airtribe", logo: "/logos/partners/trust/airtribe.svg" },
+  { name: "FDE Academy", logo: "/logos/partners/trust/fde-academy.svg" },
+];
+
+export const awardLogos = [
+  { name: "The Times of India", logo: "/logos/partners/trust/toi-crest.gif" },
+  { name: "TOI", logo: "/logos/partners/trust/toi-icon.png" },
+  { name: "Business Outreach", logo: "/logos/partners/trust/business-outreach.png" },
+  { name: "Thapar Institute of Engineering & Technology", logo: "/logos/partners/trust/thapar.png" },
+  { name: "BITS Pilani", logo: "/logos/partners/trust/bits-pilani.png" },
 ];
 
 export const capabilities = [
@@ -164,100 +159,158 @@ export const engagements = [
   },
 ];
 
-export const supply = [
-  {
-    step: "01",
-    tag: "People",
-    title: "Trainer Marketplace",
-    image: "/images/cards/office.jpg",
-    body: "Working practitioners with two to ten-plus years of experience, sourced from MAANG and top product companies, matched to your programme requirements and delivery calendar.",
+export const portfolio = {
+  eyebrow: "Project Portfolio",
+  title: ["What we have", "actually", "built."],
+  body: "Twenty-five-plus product engagements across five countries — platforms in healthcare compliance, governance, higher education and skilling. Eight are set out here; each one shipped, in production, and still running.",
+  stats: [
+    { value: 25, suffix: "+", label: "Product engagements" },
+    { value: 5, suffix: "+", label: "Countries of delivery" },
+  ],
+  sectionEyebrow: "The portfolio",
+  sectionTitle: "Eight builds, five markets",
+  projects: [
+    {
+      client: "Accreqo",
+      image: "/images/cards/secure.jpg",
+      logo: "/logos/clients/accreqo.png",
+      flag: "/flags/sa.png",
+      country: "Saudi Arabia",
+      step: "01",
+      title: "Multi-Tenant Compliance Intelligence Platform",
+      body: "Multi-tenant accreditation and compliance platform for clinics, hospitals and academic medical centres, with role-based evidence workflows, immutable audit trails and PDPL-aligned data residency.",
+      tags: ["Multi-tenant", "RBAC", "Audit trails", "PDPL"],
+    },
+    {
+      client: "RTIH",
+      image: "/images/cards/office.jpg",
+      logo: "/logos/clients/rtih.png",
+      flag: "/flags/in.png",
+      country: "India",
+      step: "02",
+      title: "API-First Innovation Ecosystem Platform",
+      body: "Innovation-ecosystem platform covering programme operations, partner directories and founder tooling — headless CMS with an API-driven front end and automated release pipelines.",
+      tags: ["Headless CMS", "REST APIs", "CI/CD", "Cloud"],
+    },
+    {
+      client: "Audix GRC",
+      image: "/images/cards/boardroom.jpg",
+      logo: "/logos/clients/audix-grc.png",
+      flag: "/flags/in.png",
+      country: "India",
+      step: "03",
+      title: "Continuous Assurance & Controls Engine",
+      body: "GRC product engineering — audit workflow automation, evidence management and continuous readiness scoring, driven by a rules engine mapping controls to live system state.",
+      tags: ["Rules engine", "Workflow automation", "SSO", "Security"],
+    },
+    {
+      client: "Bahrain Institution",
+      image: "/images/cards/aerial.jpg",
+      logo: "/logos/clients/university-of-bahrain.png",
+      flag: "/flags/bh.png",
+      country: "Bahrain",
+      step: "04",
+      title: "Retrieval-Augmented Academic Intelligence",
+      body: "Applied AI and academic content systems for a Gulf institution — retrieval-augmented generation over institutional material, with vector search and human-in-the-loop review.",
+      tags: ["LLM / RAG", "Vector search", "Python", "Cloud"],
+    },
+    {
+      client: "ZSkillup",
+      image: "/images/cards/build.jpg",
+      logo: "/logos/clients/zskillup.png",
+      flag: "/flags/in.png",
+      country: "India",
+      step: "05",
+      title: "Event-Driven Skills Intelligence Platform",
+      body: "Upskilling platform with analytics-driven learner tracking, cohort management and automated skill assessment, built on an event-driven data pipeline feeding real-time dashboards.",
+      tags: ["Event pipeline", "Auto-grading", "Analytics", "AWS"],
+    },
+    {
+      client: "Ulektz",
+      image: "/images/cards/globe.jpg",
+      logo: "/logos/clients/ulektz.png",
+      flag: "/flags/sg.png",
+      country: "Singapore",
+      step: "06",
+      title: "High-Concurrency Campus Network Platform",
+      body: "Education networking and campus-services platform at scale — high-concurrency APIs, distributed caching and load-tested release paths across a large institutional user base.",
+      tags: ["Microservices", "Caching", "Load testing", "CDN"],
+    },
+    {
+      client: "Jaro Education",
+      image: "/images/cards/run.jpg",
+      logo: "/logos/clients/jaro-education.png",
+      flag: "/flags/in.png",
+      country: "India",
+      step: "07",
+      title: "Enrolment & Programme Data Platform",
+      body: "Platform engineering for an executive-education provider — enrolment funnels, cohort operations and a reporting warehouse consolidating programme and partner data.",
+      tags: ["Data warehouse", "ETL", "Integrations", "Analytics"],
+    },
+    {
+      client: "S3CE Technology Solutions",
+      image: "/images/cards/office.jpg",
+      logo: "/logos/clients/sage.png",
+      flag: "/flags/au.png",
+      country: "Australia",
+      step: "08",
+      title: "Cloud-Native Delivery & Observability",
+      body: "Embedded engineering partnership covering build, integration and ongoing platform support — infrastructure-as-code, containerised deployment and full-stack observability.",
+      tags: ["IaC", "Kubernetes", "Observability", "CI/CD"],
+    },
+  ],
+  alsoDeliveredEyebrow: "Also delivered",
+  alsoDeliveredTitle: "Advanced and specialist work",
+  alsoDelivered: [
+    {
+      tag: "Sovereign AI",
+      body: "LMS architecture for a Gulf client, designed for in-Kingdom data residency and sovereign LLM hosting.",
+    },
+    {
+      tag: "Applied AI",
+      body: "Clinical and operational AI systems for a healthcare provider group in Saudi Arabia.",
+    },
+    {
+      tag: "Content pipelines",
+      body: "Automated e-book generation pipeline converting source material into structured, publishable coursebooks.",
+    },
+    {
+      tag: "Supply chain",
+      body: "Visibility and operations platform for a logistics operator in the UAE.",
+    },
+    {
+      tag: "Enterprise BI",
+      body: "Reporting and analytics layer for an engineering group in the Kingdom, consolidating fragmented systems.",
+    },
+    {
+      tag: "Embedded leadership",
+      body: "Dedicated engineering pod plus CTO-level technology leadership for a venture-backed product company.",
+    },
+    {
+      tag: "BFSI security",
+      body: "Cybersecurity and GRC capability programmes built for banking-sector requirements.",
+    },
+    {
+      tag: "Performance",
+      body: "Load, stress and reliability programmes run ahead of high-traffic platform launches.",
+    },
+    {
+      tag: "Modernisation",
+      body: "Legacy systems decomposed into services with staged, zero-downtime cutover.",
+    },
+  ],
+  further: {
+    value: "+20",
+    title: "further engagements delivered",
+    body: "Across product engineering, AI, data, cloud and security — including work we cannot name here. Full detail available under mutual non-disclosure.",
   },
-  {
-    step: "02",
-    tag: "People",
-    title: "Mentors, Mocks & Masterclasses",
-    image: "/images/cards/boardroom.jpg",
-    body: "An on-demand pool for interview preparation, mentorship tracks, guest webinars and industry masterclasses, layered onto programmes you already run.",
-  },
-  {
-    step: "03",
-    tag: "Content",
-    title: "Curriculum & Content Design",
-    image: "/images/cards/aerial.jpg",
-    body: "Learning roadmaps, session-level breakdowns, assignments, projects, MCQ banks and assessments — built to your academic structure and outcome requirements.",
-  },
-  {
-    step: "04",
-    tag: "Platform",
-    title: "The AI LINC LMS",
-    image: "/images/cards/globe.jpg",
-    body: "Adaptive, AI-native, white-label and multi-tenant — your brand and domain on the front, our intelligence layer underneath.",
-  },
-];
-
-export const audiences = [
-  "Government training programmes",
-  "EdTech platforms",
-  "Universities & colleges",
-  "Corporate L&D teams",
-];
-
-export const platformLayers = [
-  {
-    layer: "Experience Layer",
-    items: [
-      { name: "Students", detail: "Path, progress, feedback" },
-      { name: "Trainers", detail: "Cohort view, interventions" },
-      { name: "Faculty", detail: "Curriculum, evaluation" },
-      { name: "Administrators", detail: "Outcomes, reporting" },
-    ],
-  },
-  {
-    layer: "Delivery & Assessment",
-    items: [
-      {
-        name: "Adaptive Learning Paths",
-        detail: "Sequencing responds to mastery, not to a fixed calendar.",
-      },
-      {
-        name: "Unified Evaluation Engine",
-        detail: "MCQs, code, projects and peer review in one pipeline.",
-      },
-      {
-        name: "Assessment Integrity",
-        detail: "Identity checks, anomaly detection, tamper-evident certificates.",
-      },
-    ],
-  },
-  {
-    layer: "Intelligence Layer",
-    items: [
-      {
-        name: "Competency Tracking",
-        detail: "Skill acquisition per learner, not percentage complete.",
-      },
-      {
-        name: "Cohort Analytics",
-        detail: "Where a batch is drifting, early enough to act on it.",
-      },
-      {
-        name: "AI Content Operations",
-        detail: "Structuring, question generation and remediation.",
-      },
-    ],
-  },
-];
-
-export const foundation = {
-  title: "Multi-tenant, cloud-native infrastructure",
-  body: "One platform instance, many institutions — isolated data, independent branding, shared engineering effort. New tenants are configured, not rebuilt.",
 };
 
 export const founders = [
   {
     name: "Shubham Lal",
     role: "Co-Founder & CEO",
-    body: "Eight years at Microsoft across AI and cloud systems. Leads technology delivery and institutional partnerships.",
+    body: "Eight years at Microsoft across AI and cloud systems. Leads technology delivery and client partnerships.",
     image: "/trainers/shubham_lal.jpg",
   },
   {
@@ -288,49 +341,6 @@ export const team = [
   { name: "Vivek Ananth", image: "/team/vivek_ananth.jpg" },
   { name: "Yash Mittal", image: "/team/yash_mittal.jpg" },
 ];
-
-export const trainers = [
-  { name: "Abirami Sukumari", image: "/trainers/Abirami_sukumari.jpg" },
-  { name: "Divyansh Dubey", image: "/trainers/Divyansh_dubey.jpg" },
-  { name: "Kranthi Priya", image: "/trainers/Kranthi_Priya.jpeg" },
-  { name: "Noorman", image: "/trainers/noorman.jpeg" },
-  { name: "Poorva", image: "/trainers/poorva_image.jpg" },
-  { name: "Sandeep", image: "/trainers/sandeep.jpeg" },
-  { name: "Sheaker Reddy", image: "/trainers/sheaker_reddy.jpeg" },
-  { name: "Shubham Lal", image: "/trainers/shubham_lal.jpg" },
-  { name: "Yamini Bandi", image: "/trainers/yamini_bandi.jpg" },
-];
-
-export const partners = [
-  { name: "Pearson Edexcel", image: "/logos/partners/edexcel.svg" },
-  { name: "Lords University", image: "/logos/partners/lords-university.jpg" },
-  { name: "Impacteers", image: "/logos/partners/impacteers.svg" },
-  { name: "Be10x", image: "/logos/partners/be10x.png" },
-  { name: "UTB", image: "/logos/partners/utb.png" },
-  { name: "ZSkillup", image: "/logos/partners/zskillup.png" },
-];
-
-export const trustBar = {
-  accredited: [
-    { name: "Microsoft", image: "/logos/partners/trust/microsoft.svg" },
-    { name: "AWS", image: "/logos/partners/trust/aws.svg" },
-    { name: "Google", image: "/logos/partners/trust/google.svg" },
-  ],
-  runningInProduction: [
-    { name: "AgileOlogy", image: "/logos/partners/trust/agileology.webp" },
-    { name: "AIMERZ.ai", image: "/logos/partners/trust/aimerz.png" },
-    { name: "Impacteers", image: "/logos/partners/impacteers.svg" },
-    { name: "Airtribe", image: "/logos/partners/trust/airtribe.svg", dark: true },
-    { name: "FDE Academy", image: "/logos/partners/trust/fde-academy.svg", dark: true },
-  ],
-  recognised: [
-    { name: "The Times of India", image: "/logos/partners/trust/toi-crest.gif" },
-    { name: "TOI", image: "/logos/partners/trust/toi-icon.png" },
-    { name: "Business Outreach", image: "/logos/partners/trust/business-outreach.png" },
-    { name: "Thapar Institute of Engineering & Technology", image: "/logos/partners/trust/thapar.png" },
-    { name: "BITS Pilani", image: "/logos/partners/trust/bits-pilani.png" },
-  ],
-};
 
 export const press = [
   {
@@ -412,12 +422,9 @@ export const press = [
   },
 ];
 
-export const footprint =
-  "Our institutional footprint is concentrated in Telangana and the Gulf, and we grow it deliberately rather than as fast as we could. We size engagements against the delivery capacity we actually hold — trainers, content teams and platform support are committed per programme before a proposal goes out.";
-
 export const nav = [
   { label: "Company", href: "/#company" },
   { label: "Technology", href: "/#technology" },
-  { label: "Education", href: "/#education" },
+  { label: "Portfolio", href: "/#portfolio" },
   { label: "Team", href: "/team" },
 ];

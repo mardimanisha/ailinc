@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import CardVisual from "./CardVisual";
-import { Pill, RoundButton, Words } from "./ui";
+import { Pill, Words } from "./ui";
 
 export type Slide = {
   step: string;
@@ -42,12 +42,17 @@ export default function Carousel({
   tone?: "light" | "dark";
 }) {
   const [index, setIndex] = useState(0);
+  const [active, setActive] = useState(0);
   const light = tone === "light";
   const trackRef = useRef<HTMLDivElement>(null);
 
   const go = useCallback(
     (dir: number) =>
-      setIndex((i) => Math.min(Math.max(i + dir, 0), slides.length - 1)),
+      setIndex((i) => {
+        const next = Math.min(Math.max(i + dir, 0), slides.length - 1);
+        setActive(next);
+        return next;
+      }),
     [slides.length]
   );
 
@@ -75,6 +80,7 @@ export default function Carousel({
   return (
     <section
       id={id}
+      data-brand-theme={light ? "light" : "dark"}
       className={clsx(
         "grain relative z-30 overflow-hidden rounded-t-[28px] py-24 sm:rounded-t-[40px] sm:py-32",
         light ? "bg-paper text-brand-deep" : "bg-ink text-paper"
@@ -111,14 +117,14 @@ export default function Carousel({
           <div className="flex items-baseline gap-1">
             <AnimatePresence mode="popLayout">
               <motion.span
-                key={slides[index].step}
+                key={slides[active].step}
                 initial={{ y: 26, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -26, opacity: 0 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 className="display inline-block text-[clamp(2.6rem,5vw,3.6rem)]"
               >
-                {slides[index].step}
+                {slides[active].step}
               </motion.span>
             </AnimatePresence>
             <span
@@ -139,22 +145,6 @@ export default function Carousel({
           >
             {lead}
           </p>
-
-          <div className="mt-9 hidden items-center gap-3 lg:flex">
-            <RoundButton
-              onClick={() => go(-1)}
-              label="Previous"
-              flip
-              disabled={index === 0}
-              tone={light ? "light" : "dark"}
-            />
-            <RoundButton
-              onClick={() => go(1)}
-              label="Next"
-              disabled={index === slides.length - 1}
-              tone={light ? "light" : "dark"}
-            />
-          </div>
         </div>
 
         {/* sliding track — the negative right margin lets it run out to
@@ -172,9 +162,12 @@ export default function Carousel({
             {slides.map((s, i) => (
               <motion.article
                 key={s.title}
+                onHoverStart={() => setActive(i)}
+                onFocus={() => setActive(i)}
+                tabIndex={0}
                 animate={{ opacity: i < index ? 0.25 : 1 }}
                 transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
-                className="group relative h-[26rem] w-[19rem] shrink-0 overflow-hidden rounded-[22px]"
+                className="group relative h-[26rem] w-[19rem] shrink-0 overflow-hidden rounded-[22px] outline-none"
               >
                 <CardVisual image={s.image} priority={i === 0} />
 
@@ -214,23 +207,6 @@ export default function Carousel({
               </motion.article>
             ))}
           </motion.div>
-        </div>
-
-        {/* mobile controls */}
-        <div className="flex items-center gap-3 lg:hidden">
-          <RoundButton
-            onClick={() => go(-1)}
-            label="Previous"
-            flip
-            disabled={index === 0}
-            tone={light ? "light" : "dark"}
-          />
-          <RoundButton
-            onClick={() => go(1)}
-            label="Next"
-            disabled={index === slides.length - 1}
-            tone={light ? "light" : "dark"}
-          />
         </div>
       </div>
     </section>

@@ -23,15 +23,15 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "AI LINC — One company. Two verticals.",
+  title: "AI LINC — Engineering, secured end to end.",
   description:
-    "AILinc Technologies Pvt Ltd builds AI-native software for enterprises and AI-native learning infrastructure for institutions — engineered by the same team, delivered across six countries.",
+    "AILinc Technologies Pvt Ltd builds and secures AI-native software for enterprise and public-sector clients, delivered across six countries.",
   metadataBase: new URL("https://ailinc.com"),
   icons: { icon: "/logos/ai-linc-mark-color.svg" },
   openGraph: {
-    title: "AI LINC — One company. Two verticals.",
+    title: "AI LINC — Engineering, secured end to end.",
     description:
-      "AI-native software for enterprises and AI-native learning infrastructure for institutions.",
+      "AI-native software for enterprise and public-sector clients — product engineering, platform reliability and security & compliance.",
     images: ["/logos/ai-linc-lockup-color.png"],
   },
 };

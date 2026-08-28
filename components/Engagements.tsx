@@ -4,13 +4,16 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import clsx from "clsx";
 import { Pill, Reveal, Words } from "./ui";
-import { engagements, footprint } from "@/lib/content";
+import { engagements } from "@/lib/content";
 
 export default function Engagements() {
   const [active, setActive] = useState(0);
 
   return (
-    <section className="grain relative z-40 rounded-t-[28px] bg-ink py-24 sm:rounded-t-[40px] sm:py-32">
+    <section
+      data-brand-theme="dark"
+      className="grain relative z-40 rounded-t-[28px] bg-ink py-24 sm:rounded-t-[40px] sm:py-32"
+    >
       <div className="mx-auto max-w-[1240px] px-6 lg:px-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -88,15 +91,6 @@ export default function Engagements() {
             </Reveal>
           ))}
         </div>
-
-        {/* footprint statement */}
-        <Reveal delay={0.15} className="mt-20 lg:mt-28">
-          <blockquote className="mx-auto max-w-[54ch] text-center">
-            <p className="display text-[clamp(1.35rem,2.9vw,2.05rem)] leading-[1.28] text-paper-2/85">
-              {footprint}
-            </p>
-          </blockquote>
-        </Reveal>
       </div>
     </section>
   );

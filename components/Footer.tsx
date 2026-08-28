@@ -15,6 +15,7 @@ export default function Footer() {
   return (
     <footer
       id="contact"
+      data-brand-theme="dark"
       className="grain relative z-70 overflow-hidden rounded-t-[28px] bg-ink pt-24 sm:rounded-t-[40px] sm:pt-32"
     >
       {/* the landscape returns, bottom-lit */}
@@ -79,16 +80,6 @@ export default function Footer() {
               <ul className="mt-4 space-y-2.5 text-sm">
                 <FooterLink href="https://ailinc.com">{company.tech.site}</FooterLink>
                 {company.tech.emails.map((e) => (
-                  <FooterLink key={e} href={`mailto:${e}`}>
-                    {e}
-                  </FooterLink>
-                ))}
-              </ul>
-
-              <p className="mt-8 eyebrow text-paper-2/35">Education</p>
-              <ul className="mt-4 space-y-2.5 text-sm">
-                <FooterLink href="https://ailinc.in">{company.edu.site}</FooterLink>
-                {company.edu.emails.map((e) => (
                   <FooterLink key={e} href={`mailto:${e}`}>
                     {e}
                   </FooterLink>

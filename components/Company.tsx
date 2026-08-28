@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { Counter, Pill, Reveal, Words } from "./ui";
@@ -22,6 +21,7 @@ export default function Company() {
     <section
       ref={ref}
       id="company"
+      data-brand-theme="dark"
       // overflow-x-clip: the cards enter from off-screen right, and a
       // transform still counts toward scrollable overflow. `clip` (not
       // `hidden`) avoids turning this into a scroll container.
@@ -40,19 +40,6 @@ export default function Company() {
               </span>
               <span className="mt-1 block">
                 <Words text={whoWeAre.title[1]} delay={0.12} />{" "}
-                {/* inline media chip, as in the reference heading */}
-                <span className="relative inline-block h-[0.72em] w-[1.35em] translate-y-[0.06em] overflow-hidden rounded-[0.28em] align-middle ring-1 ring-brand-2/25">
-                  <span
-                    className="absolute inset-0"
-                    style={{ background: "linear-gradient(120deg,#2356D6,#00E0FF)" }}
-                  />
-                  <Image
-                    src="/logos/ai-linc-mark-white.svg"
-                    alt=""
-                    fill
-                    className="scale-[0.62] object-contain opacity-90"
-                  />
-                </span>{" "}
                 <Words text={whoWeAre.title[2]} delay={0.24} italic={["backbone"]} />
               </span>
             </h2>

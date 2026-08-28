@@ -7,12 +7,14 @@ import { press } from "@/lib/content";
 /**
  * Press and award coverage, laid out as a masonry bento — each clipping
  * keeps its native aspect ratio and stacks into whichever column CSS
- * columns assigns it, on the light surface between the education
- * carousel and the partner strip.
+ * columns assigns it.
  */
 export default function Newsroom() {
   return (
-    <section className="grain relative z-50 -mt-7 rounded-t-[28px] bg-paper py-24 text-brand-deep sm:-mt-10 sm:rounded-t-[40px] sm:py-32">
+    <section
+      data-brand-theme="light"
+      className="grain relative z-50 -mt-7 rounded-t-[28px] bg-paper py-24 text-brand-deep sm:-mt-10 sm:rounded-t-[40px] sm:py-32"
+    >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.5]"
         style={{
@@ -30,9 +32,8 @@ export default function Newsroom() {
 
         <Reveal delay={0.15} className="mt-6 max-w-[60ch]">
           <p className="text-sm leading-relaxed text-brand-deep/60">
-            Award recognitions and regional press coverage of our institutional
-            partnerships — including the Osmania University MoU and the ET Industry
-            Achievers award for AI &amp; Technology Education.
+            Award recognitions and regional press coverage of our work, including
+            the ET Industry Achievers award for AI &amp; Technology.
           </p>
         </Reveal>
 

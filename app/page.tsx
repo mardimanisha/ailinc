@@ -1,17 +1,20 @@
 import Nav from "@/components/Nav";
+import BrandMark from "@/components/BrandMark";
 import Hero from "@/components/Hero";
 import Company from "@/components/Company";
+import ClientLogos from "@/components/ClientLogos";
 import Carousel from "@/components/Carousel";
+import Portfolio from "@/components/Portfolio";
 import Engagements from "@/components/Engagements";
 import Newsroom from "@/components/Newsroom";
-import Partners from "@/components/Partners";
 import Footer from "@/components/Footer";
-import { capabilities, supply } from "@/lib/content";
+import { capabilities } from "@/lib/content";
 
 export default function Page() {
   return (
     <main className="relative">
       <Nav />
+      <BrandMark />
       <Hero />
 
       <Company />
@@ -33,27 +36,14 @@ export default function Page() {
         }))}
       />
 
+      <Portfolio />
+
       <Engagements />
 
-      <Carousel
-        id="education"
-        tone="light"
-        eyebrow="02 · Education & Institutional Learning"
-        heading="People, content, platform"
-        italic={["platform"]}
-        lead="We supply the people, content and platform that institutions use to run their own programmes. We do not enrol students directly — every engagement is with a government body, university, college, EdTech platform or corporate L&D team."
-        slides={supply.map((s) => ({
-          step: s.step,
-          tag: s.tag,
-          title: s.title,
-          body: s.body,
-          image: s.image,
-        }))}
-      />
+      <ClientLogos />
 
       <Newsroom />
 
-      <Partners />
       <Footer />
     </main>
   );
