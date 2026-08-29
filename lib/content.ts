@@ -129,8 +129,6 @@ export const productionLogos = [
 
 export const awardLogos = [
   { name: "The Times of India", logo: "/logos/partners/trust/toi-logo-full.svg" },
-  { name: "The Times of India Crest", logo: "/logos/partners/trust/toi-crest.gif" },
-  { name: "TOI", logo: "/logos/partners/trust/toi-icon.png" },
   { name: "Business Outreach", logo: "/logos/partners/trust/business-outreach.png" },
   { name: "Thapar Institute of Engineering & Technology", logo: "/logos/partners/trust/thapar.png" },
   { name: "BITS Pilani", logo: "/logos/partners/trust/bits-pilani.png" },
