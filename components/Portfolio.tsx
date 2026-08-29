@@ -35,15 +35,7 @@ export default function Portfolio() {
           <p className="text-sm leading-relaxed text-brand-deep/60">{portfolio.body}</p>
         </Reveal>
 
-        {/* project grid */}
         <div className="mt-16 lg:mt-20">
-          <span className="eyebrow text-brand/70">{portfolio.sectionEyebrow}</span>
-          <h3 className="display mt-3 text-[clamp(1.6rem,3vw,2.3rem)] text-brand-deep">
-            {portfolio.sectionTitle}
-          </h3>
-        </div>
-
-        <div className="mt-12 lg:mt-14">
           <PortfolioTabs projects={portfolio.projects} />
         </div>
 

@@ -57,6 +57,12 @@ body {
   overflow-y: visible;
 }
 
+button:not(:disabled),
+[role="button"]:not(:disabled),
+a {
+  cursor: pointer;
+}
+
 ::selection {
   background: var(--color-brand-2);
   color: var(--color-brand-deep);

@@ -23,8 +23,8 @@ export default function Page() {
         id="technology"
         tone="light"
         eyebrow="01 · Technology & Software Services"
-        heading="Build it, run it, secure it"
-        italic={["secure"]}
+        heading="We Build, Run, Secure"
+        italic={[]}
         lead="We build and secure production software for enterprise and public-sector clients — from full product builds to embedded engineering squads and independent security assessments."
         slides={capabilities.map((c) => ({
           step: c.step,

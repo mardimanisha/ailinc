@@ -71,7 +71,7 @@ export default function BrandMark() {
         width={1600}
         height={600}
         priority
-        className="w-28 sm:w-36"
+        className="w-56 sm:w-72"
       />
     </Link>
   );

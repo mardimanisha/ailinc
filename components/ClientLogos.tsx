@@ -23,7 +23,6 @@ export default function ClientLogos() {
       </div>
 
       <div className="mt-12 flex flex-col gap-8">
-        <MarqueeRow logos={clientLogos} duration={22} />
         <MarqueeRow logos={[...clientLogos].reverse()} duration={26} reverse />
       </div>
 

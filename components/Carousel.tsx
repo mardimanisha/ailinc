@@ -150,7 +150,7 @@ export default function Carousel({
         {/* mobile: a plain vertical stack, one card per row */}
         <div className="flex flex-col gap-6 lg:hidden">
           {slides.map((s, i) => (
-            <Card key={s.title} s={s} i={i} onActivate={setActive} />
+            <Card key={s.title} s={s} i={i} onActivate={setActive} className="w-full" />
           ))}
         </div>
 
@@ -204,7 +204,7 @@ function Card({
       animate={{ opacity: fade ? 0.25 : 1 }}
       transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
       className={clsx(
-        "group relative h-[26rem] w-full overflow-hidden rounded-[22px] outline-none",
+        "group relative h-[26rem] overflow-hidden rounded-[22px] outline-none",
         className
       )}
     >
