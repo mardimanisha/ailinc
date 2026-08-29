@@ -41,6 +41,12 @@ html {
   background: var(--color-paper);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Without this, off-screen transformed elements (e.g. the Company
+     card sliding in from x: 220) still count toward layout overflow
+     on mobile, which widens the browser's layout viewport past the
+     device width and crops the visible page to the left portion of
+     it — `overflow-x: clip` on body alone doesn't prevent that. */
+  overflow-x: clip;
 }
 
 body {
