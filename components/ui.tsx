@@ -60,8 +60,15 @@ export function Words({
 
   return (
     <span ref={ref} className={clsx("inline", className)}>
+      {/* The mask is grown 0.2em below and pulled back with an equal negative
+          margin: the clip box then clears descenders (p, g, y) while the word
+          stays on the same baseline, and the hidden word — parked a full 110%
+          of its own height down — is still out of sight. */}
       {words.map((word, i) => (
-        <span key={`${word}-${i}`} className="inline-block overflow-hidden align-bottom">
+        <span
+          key={`${word}-${i}`}
+          className="inline-block overflow-hidden align-bottom pb-[0.2em] -mb-[0.2em]"
+        >
           <motion.span
             className={clsx(
               "inline-block",

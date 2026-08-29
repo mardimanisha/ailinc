@@ -9,6 +9,9 @@ import { Words } from "./ui";
 import { company, countries, nav } from "@/lib/content";
 
 export default function Footer() {
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [need, setNeed] = useState("");
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
@@ -35,10 +38,36 @@ export default function Footer() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (email.trim()) setSent(true);
+                if (name.trim() && contact.trim() && email.trim()) setSent(true);
               }}
-              className="mt-9 flex max-w-md items-center gap-2 rounded-full bg-ink-3/70 p-1.5 ring-1 ring-brand-soft/20 backdrop-blur-md"
+              className="mt-9 flex max-w-md flex-col gap-3 rounded-3xl bg-ink-3/70 p-4 ring-1 ring-brand-soft/20 backdrop-blur-md"
             >
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                aria-label="Name"
+                className="min-w-0 rounded-full bg-ink-2/60 px-4 py-2.5 text-sm text-paper outline-none ring-1 ring-brand-soft/10 placeholder:text-paper-2/35 focus:ring-brand-2/40"
+              />
+              <input
+                type="text"
+                required
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+                placeholder="Phone number"
+                aria-label="Contact number"
+                className="min-w-0 rounded-full bg-ink-2/60 px-4 py-2.5 text-sm text-paper outline-none ring-1 ring-brand-soft/10 placeholder:text-paper-2/35 focus:ring-brand-2/40"
+              />
+              <input
+                type="text"
+                value={need}
+                onChange={(e) => setNeed(e.target.value)}
+                placeholder="What do you want to build?"
+                aria-label="What you want"
+                className="min-w-0 rounded-full bg-ink-2/60 px-4 py-2.5 text-sm text-paper outline-none ring-1 ring-brand-soft/10 placeholder:text-paper-2/35 focus:ring-brand-2/40"
+              />
               <input
                 type="email"
                 required
@@ -46,14 +75,14 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your work email"
                 aria-label="Work email"
-                className="min-w-0 flex-1 bg-transparent px-4 py-2 text-sm text-paper outline-none placeholder:text-paper-2/35"
+                className="min-w-0 rounded-full bg-ink-2/60 px-4 py-2.5 text-sm text-paper outline-none ring-1 ring-brand-soft/10 placeholder:text-paper-2/35 focus:ring-brand-2/40"
               />
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: "spring", stiffness: 380, damping: 24 }}
-                className="shrink-0 rounded-full px-5 py-2 text-sm font-medium text-paper"
+                className="mt-1 shrink-0 rounded-full px-5 py-2.5 text-sm font-medium text-paper"
                 style={{ background: "linear-gradient(100deg,#2356D6,#00E0FF)" }}
               >
                 {sent ? "Received" : "Contact us"}

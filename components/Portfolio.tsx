@@ -1,6 +1,7 @@
 "use client";
 
-import { Pill, Reveal, Words } from "./ui";
+import Image from "next/image";
+import { Pill, Reveal, Tilt, Words } from "./ui";
 import PortfolioTabs from "./PortfolioTabs";
 import { portfolio } from "@/lib/content";
 
@@ -46,28 +47,80 @@ export default function Portfolio() {
             {portfolio.alsoDeliveredTitle}
           </h3>
 
-          <div className="mt-10 grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {portfolio.alsoDelivered.map((a, i) => (
               <Reveal key={a.tag} delay={Math.min(i * 0.05, 0.4)}>
-                <span className="eyebrow text-brand-deep/70">{a.tag}</span>
-                <p className="mt-2 text-sm leading-relaxed text-brand-deep/55">{a.body}</p>
+                <Tilt strength={5} className="h-full">
+                  <div
+                    className="group relative h-full rounded-[20px] p-[1px] transition-all duration-500 hover:-translate-y-1"
+                    style={{
+                      background: `linear-gradient(${150 + i * 35}deg, rgba(35,86,214,0.35), rgba(0,224,255,0.35) 45%, rgba(35,86,214,0) 70%)`,
+                    }}
+                  >
+                    <div className="relative flex h-full flex-col overflow-hidden rounded-[19px] bg-white/80 p-6 ring-1 ring-brand-deep/8 transition-all duration-500 group-hover:bg-white group-hover:shadow-[0_28px_60px_-28px_rgba(35,86,214,0.35)]">
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -right-3 -top-6 select-none font-display text-[6.5rem] leading-none text-brand-deep/[0.05] transition-all duration-500 group-hover:-translate-y-1 group-hover:text-brand-deep/[0.09]"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-40"
+                        style={{ background: "linear-gradient(100deg,#2356D6,#00E0FF)" }}
+                      />
+
+                      <span className="relative inline-flex w-fit items-center gap-2">
+                        <span
+                          className="size-1.5 shrink-0 rounded-full transition-transform duration-500 group-hover:scale-125"
+                          style={{ background: "linear-gradient(100deg,#2356D6,#00E0FF)" }}
+                        />
+                        <span className="eyebrow text-brand-deep">{a.tag}</span>
+                      </span>
+                      <p className="relative mt-3 flex-1 text-sm leading-relaxed text-brand-deep/55">
+                        {a.body}
+                      </p>
+                      <div className="relative mt-5 flex items-center justify-between border-t border-brand-deep/8 pt-4">
+                        <div className="flex items-center gap-1.5">
+                          {a.countries.map((c) => (
+                            <span
+                              key={c.code}
+                              title={c.name}
+                              className="relative h-4 w-6 shrink-0 overflow-hidden rounded-[3px] ring-1 ring-brand-deep/10 transition-transform duration-300 hover:z-10 hover:scale-125"
+                            >
+                              <Image src={c.flag} alt={c.name} fill sizes="24px" className="object-cover" />
+                            </span>
+                          ))}
+                        </div>
+                        <span className="text-[11px] uppercase tracking-wide text-brand-deep/35">
+                          {a.countries.map((c) => c.name).join(" · ")}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Tilt>
               </Reveal>
             ))}
-          </div>
 
-          <Reveal delay={0.2} className="mt-10">
-            <div className="flex flex-col items-start gap-4 rounded-[18px] bg-ink px-7 py-8 sm:flex-row sm:items-center sm:gap-8 sm:px-9">
-              <span className="display text-[clamp(2.2rem,4.6vw,3rem)] text-paper">
-                {portfolio.further.value}
-              </span>
-              <div>
-                <p className="font-display text-lg text-paper">{portfolio.further.title}</p>
-                <p className="mt-1.5 max-w-[64ch] text-sm leading-relaxed text-paper-2/55">
-                  {portfolio.further.body}
-                </p>
-              </div>
-            </div>
-          </Reveal>
+            <Reveal delay={0.4}>
+              <Tilt strength={5} className="h-full">
+                <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] bg-ink px-7 py-8">
+                  <span
+                    className="pointer-events-none absolute -right-14 -top-14 size-44 rounded-full opacity-30 blur-3xl"
+                    style={{ background: "linear-gradient(100deg,#2356D6,#00E0FF)" }}
+                  />
+                  <span className="display text-[clamp(2.6rem,5vw,3.4rem)] text-paper">
+                    {portfolio.further.value}
+                  </span>
+                  <div>
+                    <p className="font-display text-lg text-paper">{portfolio.further.title}</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-paper-2/55">
+                      {portfolio.further.body}
+                    </p>
+                  </div>
+                </div>
+              </Tilt>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>

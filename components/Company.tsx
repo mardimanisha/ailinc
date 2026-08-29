@@ -1,17 +1,20 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
-import { Counter, Pill, Reveal, Words } from "./ui";
-import { whoWeAre, stats } from "@/lib/content";
+import { useRef, useState } from "react";
+import { Pill, Reveal, Words } from "./ui";
+import GlobeReach from "./GlobeReach";
+import DeliveryRail from "./DeliveryRail";
+import { whoWeAre } from "@/lib/content";
+
 
 /**
  * The overlap section: it scrolls up over the sticky hero, with the
- * right-hand card stack sliding in from off-screen on a stagger —
- * exactly the reference's second beat.
+ * globe panel sliding in from off-screen — the reference's second beat.
  */
 export default function Company() {
   const ref = useRef<HTMLElement>(null);
+  const [country, setCountry] = useState("IN");
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "start 25%"],
@@ -22,15 +25,25 @@ export default function Company() {
       ref={ref}
       id="company"
       data-brand-theme="dark"
-      // overflow-x-clip: the cards enter from off-screen right, and a
+      // overflow-x-clip: the panel enters from off-screen right, and a
       // transform still counts toward scrollable overflow. `clip` (not
       // `hidden`) avoids turning this into a scroll container.
       className="grain relative z-20 overflow-x-clip rounded-t-[28px] bg-ink pt-24 pb-28 sm:rounded-t-[40px] sm:pt-32 lg:pb-36"
       style={{ boxShadow: "0 -40px 100px -20px rgba(8,11,20,0.95)" }}
     >
-      <div className="mx-auto grid max-w-[1240px] grid-cols-1 gap-16 px-6 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:px-10">
-        {/* ---------------- left column ---------------- */}
-        <div className="flex flex-col justify-between">
+      {/* soft brand wash behind the globe */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute right-[-10%] top-[8%] hidden size-[46rem] rounded-full opacity-60 blur-3xl lg:block"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(35,86,214,0.16) 0%, rgba(0,224,255,0.06) 45%, transparent 70%)",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-[1240px] px-6 lg:px-10">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_1.02fr] lg:items-center lg:gap-14">
+          {/* ---------------- left column ---------------- */}
           <div>
             <Pill>{whoWeAre.eyebrow}</Pill>
 
@@ -45,73 +58,48 @@ export default function Company() {
             </h2>
 
             <Reveal delay={0.15} className="mt-8 max-w-[52ch]">
-              <p className="text-[0.95rem] leading-relaxed text-paper-2/55">
-                {whoWeAre.body}
-              </p>
+              <p className="text-[0.95rem] leading-relaxed text-paper-2/55">{whoWeAre.body}</p>
             </Reveal>
+
           </div>
 
-          {/* stat row */}
-          <div className="mt-14 grid grid-cols-3 gap-6 lg:mt-20">
-            {stats.map((s, i) => (
-              <Reveal key={s.label} delay={0.1 + i * 0.1}>
-                <p className="display text-[clamp(2.2rem,5vw,3.4rem)] text-paper">
-                  <Counter value={s.value} suffix={s.suffix} />
-                </p>
-                <p className="mt-2 text-xs leading-snug text-paper-2/45">{s.label}</p>
-              </Reveal>
-            ))}
-          </div>
+          {/* ---------------- right column: the globe ---------------- */}
+          <ScrollIn progress={scrollYProgress}>
+            <article className="card-dark card-glow relative overflow-hidden rounded-[26px] px-6 pb-7 pt-7 text-paper sm:px-8">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <span className="eyebrow text-brand-2/70">{whoWeAre.reach.kicker}</span>
+                <span className="text-[0.62rem] uppercase tracking-[0.14em] text-paper-2/30">
+                  Drag to spin
+                </span>
+              </div>
+
+              <h3 className="display mt-3 text-[clamp(1.35rem,2.4vw,1.7rem)] leading-tight">
+                {whoWeAre.reach.statement}{" "}
+                <span className="italic text-brand-2">{whoWeAre.reach.statementHighlight}</span>
+              </h3>
+
+              <div className="mt-2">
+                <GlobeReach selected={country} onSelect={setCountry} />
+              </div>
+            </article>
+          </ScrollIn>
         </div>
 
-        {/* ---------------- right column: reach card ---------------- */}
-        <div className="flex flex-col justify-center">
-          <ReachCard progress={scrollYProgress} />
-        </div>
+        <DeliveryRail />
       </div>
     </section>
   );
 }
 
-function ReachCard({
+function ScrollIn({
   progress,
+  children,
 }: {
   progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  children: React.ReactNode;
 }) {
-  const { reach } = whoWeAre;
   const x = useTransform(progress, [0, 0.72], [220, 0]);
   const opacity = useTransform(progress, [0, 0.45], [0, 1]);
 
-  return (
-    <motion.article
-      style={{ x, opacity }}
-      className="card-dark group relative overflow-hidden rounded-[22px] p-8 text-paper sm:p-10"
-    >
-      <span className="eyebrow text-brand-2/70">{reach.kicker}</span>
-
-      <div className="mt-6 flex flex-wrap gap-2.5">
-        {reach.scope.map((s) => (
-          <span
-            key={s}
-            className="rounded-full border border-brand-2/25 bg-brand-2/10 px-4 py-1.5 text-xs font-medium tracking-wide text-brand-2"
-          >
-            {s}
-          </span>
-        ))}
-      </div>
-
-      <p className="mt-6 max-w-[46ch] text-sm leading-relaxed text-paper-2/50">
-        {reach.lead}
-      </p>
-
-      <h3 className="display mt-8 text-[clamp(1.5rem,2.9vw,2rem)] leading-tight">
-        {reach.statement}
-        <br />
-        <span className="italic text-brand-2">{reach.statementHighlight}</span>
-      </h3>
-
-      {/* sheen on hover */}
-      <span className="pointer-events-none absolute -inset-x-10 -top-24 h-40 rotate-12 bg-gradient-to-r from-transparent via-white/6 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-    </motion.article>
-  );
+  return <motion.div style={{ x, opacity }}>{children}</motion.div>;
 }
