@@ -18,14 +18,37 @@ export default function Hero() {
       <div className="sticky top-0 h-svh overflow-hidden bg-ink">
         <video
           className="h-full w-full object-cover"
-          src="/video/AI_LINC_Brand_Film.mp4"
           poster="/video/brand-film-poster.jpg"
           autoPlay
           muted={muted}
           loop
           playsInline
           preload="auto"
-        />
+        >
+          {/* Phones, portrait: 9:16 */}
+          <source
+            src="/brand-film/AI_LINC_Brand_Film_9x16.mp4"
+            media="(max-width: 479px)"
+            type="video/mp4"
+          />
+          {/* Large phones / small tablets: 1:1 */}
+          <source
+            src="/brand-film/AI_LINC_Brand_Film_1x1.mp4"
+            media="(max-width: 767px)"
+            type="video/mp4"
+          />
+          {/* Tablets: 4:5 */}
+          <source
+            src="/brand-film/AI_LINC_Brand_Film_4x5.mp4"
+            media="(max-width: 1023px)"
+            type="video/mp4"
+          />
+          {/* Desktop and up: 16:9 */}
+          <source
+            src="/brand-film/AI_LINC_Brand_Film.mp4"
+            type="video/mp4"
+          />
+        </video>
 
         <p className="display absolute bottom-10 left-0 w-full max-w-2xl bg-gradient-to-r from-ink/80 via-ink/50 to-transparent py-3 pl-6 pr-16 text-[8.5vw] leading-[1.05] text-paper sm:bottom-16 sm:max-w-3xl sm:py-4 sm:pl-10 sm:pr-24 sm:text-4xl md:text-5xl">
           Empowering the world with{" "}
