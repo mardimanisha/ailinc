@@ -57,7 +57,7 @@ function LogoGroup({
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-8">
         {logos.map((c, i) => (
-          <Reveal key={c.name} delay={0.05 + i * 0.05}>
+          <Reveal key={c.logo} delay={0.05 + i * 0.05}>
             <div className="relative h-9 w-28 shrink-0 opacity-90 transition duration-300 hover:opacity-100 sm:h-11 sm:w-36">
               <Image
                 src={c.logo}

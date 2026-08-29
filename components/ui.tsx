@@ -269,6 +269,10 @@ export function Tilt({
       className={className}
       style={{ rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
       onPointerMove={(e) => {
+        // Touch has no pointerleave to reset the tilt afterwards, so a tap
+        // would otherwise leave the card permanently skewed (and, with
+        // transformPerspective, poking past the viewport edge on mobile).
+        if (e.pointerType === "touch") return;
         const el = ref.current;
         if (!el) return;
         const r = el.getBoundingClientRect();

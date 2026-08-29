@@ -62,20 +62,20 @@ export default function Team() {
 
           {/* `items-stretch` + `h-full` on every wrapper: the article can only
               fill the grid row if Reveal and Tilt pass the height through. */}
-          <div className="mt-14 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {trainers.map((t, i) => (
               <Reveal key={t.name} delay={(i % 6) * 0.08} className="h-full">
                 <Tilt strength={3} className="h-full">
-                  <article className="group relative flex h-full flex-col overflow-hidden rounded-[20px] bg-white p-6 ring-1 ring-brand-deep/10 shadow-[0_18px_50px_-34px_rgba(10,18,40,0.5)] transition-shadow duration-500 hover:shadow-[0_28px_70px_-32px_rgba(35,86,214,0.45)]">
+                  <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[20px] bg-white p-4 ring-1 ring-brand-deep/10 shadow-[0_18px_50px_-34px_rgba(10,18,40,0.5)] transition-shadow duration-500 hover:shadow-[0_28px_70px_-32px_rgba(35,86,214,0.45)] sm:p-6">
                     {/* brand hairline that draws itself in on hover */}
                     <span
                       className="pointer-events-none absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-700 ease-out-expo group-hover:scale-x-100"
                       style={{ background: "var(--brand-grad)" }}
                     />
 
-                    <header className="flex items-start gap-4">
+                    <header className="flex items-start gap-3 sm:gap-4">
                       <div
-                        className="relative size-16 shrink-0 rounded-full p-[2px]"
+                        className="relative size-12 shrink-0 rounded-full p-[2px] sm:size-16"
                         style={{ background: "var(--brand-grad)" }}
                       >
                         <div className="relative size-full overflow-hidden rounded-full ring-2 ring-white">
@@ -90,29 +90,29 @@ export default function Team() {
                       </div>
 
                       <div className="min-w-0 pt-1.5">
-                        <h3 className="display truncate text-[1.2rem] leading-tight text-brand-deep">
+                        <h3 className="display truncate text-base leading-tight text-brand-deep sm:text-[1.2rem]">
                           {t.name}
                         </h3>
                         <p className="mt-1 truncate text-xs text-brand-deep/55">{t.title}</p>
                       </div>
 
                       {t.rating && (
-                        <span className="ml-auto shrink-0 rounded-full bg-brand-deep px-2.5 py-1 text-[11px] font-medium tracking-wide text-paper">
+                        <span className="ml-auto shrink-0 rounded-full bg-brand-deep px-2 py-1 text-[10px] font-medium tracking-wide text-paper sm:px-2.5 sm:text-[11px]">
                           ★ {t.rating}
                         </span>
                       )}
                     </header>
 
-                    <p className="mt-5 text-sm font-semibold leading-snug text-brand-deep">
+                    <p className="mt-4 text-sm font-semibold leading-snug text-brand-deep sm:mt-5">
                       {t.specialization}
                     </p>
 
-                    <div className="mt-3 flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-brand/8 px-2.5 py-1 eyebrow text-brand ring-1 ring-brand/15">
+                    <div className="mt-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <span className="rounded-full bg-brand/8 px-2 py-1 eyebrow text-brand ring-1 ring-brand/15 sm:px-2.5">
                         {t.experience}
                       </span>
                       {t.location && (
-                        <span className="rounded-full bg-ink/5 px-2.5 py-1 eyebrow text-brand-deep/55 ring-1 ring-brand-deep/10">
+                        <span className="rounded-full bg-ink/5 px-2 py-1 eyebrow text-brand-deep/55 ring-1 ring-brand-deep/10 sm:px-2.5">
                           {t.location}
                         </span>
                       )}
@@ -120,7 +120,7 @@ export default function Team() {
 
                     {/* flex-1 absorbs the row's spare height so the CTA below
                         lands on the same line across every card */}
-                    <ul className="mt-5 flex-1 space-y-2 border-t border-brand-deep/10 pt-4 text-[13px] leading-relaxed text-brand-deep/65">
+                    <ul className="mt-4 flex-1 space-y-2 border-t border-brand-deep/10 pt-4 text-[13px] leading-relaxed text-brand-deep/65 sm:mt-5">
                       {t.achievements.map((a) => (
                         <li key={a} className="flex gap-2.5">
                           <span
@@ -136,7 +136,7 @@ export default function Team() {
                       href={t.linkedin}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-brand-deep px-4 py-2 text-xs font-medium text-paper transition-colors duration-300 hover:bg-brand"
+                      className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-brand-deep px-4 py-2 text-xs font-medium text-paper transition-colors duration-300 hover:bg-brand sm:mt-6"
                     >
                       LinkedIn
                       <svg viewBox="0 0 24 24" fill="none" className="size-3.5">
