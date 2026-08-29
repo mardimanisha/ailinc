@@ -50,7 +50,7 @@ export default function Hero() {
           />
         </video>
 
-        <p className="display absolute bottom-10 left-0 w-full max-w-2xl bg-gradient-to-r from-ink/80 via-ink/50 to-transparent py-3 pl-6 pr-16 text-[8.5vw] leading-[1.05] text-paper sm:bottom-16 sm:max-w-3xl sm:py-4 sm:pl-10 sm:pr-24 sm:text-4xl md:text-5xl">
+        <p className="display absolute bottom-24 left-0 w-full max-w-2xl bg-gradient-to-r from-ink/80 via-ink/50 to-transparent py-3 pl-6 pr-16 text-[8.5vw] leading-[1.05] text-paper sm:bottom-16 sm:max-w-3xl sm:py-4 sm:pl-10 sm:pr-24 sm:text-4xl md:text-5xl">
           Empowering the world with{" "}
           <em className="text-grad italic">infinite possibilities</em> of AI.
         </p>
