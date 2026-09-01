@@ -90,19 +90,19 @@ export const whoWeAreFeatures = [
   },
   {
     icon: "shield",
-    accent: "#22C55E",
+    accent: "#1783E3",
     title: "Secure by Design",
     body: "Enterprise-grade security & compliance.",
   },
   {
     icon: "rocket",
-    accent: "#A855F7",
+    accent: "#0CB1F1",
     title: "Scalable & Reliable",
     body: "Built to scale across users and borders.",
   },
   {
     icon: "users",
-    accent: "#F97316",
+    accent: "#00E0FF",
     title: "Built for Everyone",
     body: "Governments, enterprises, startups & individuals.",
   },

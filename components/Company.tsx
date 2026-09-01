@@ -17,7 +17,9 @@ import {
 
 const STAT_TILES = whoWeAre.stats;
 
-const STAT_COLORS = ["#A855F7", "#2356D6", "#A855F7", "#2356D6"];
+/* sampled along the brand gradient (#2356D6 -> #00E0FF), so the tiles
+   sweep blue to cyan like the feature icons above them */
+const STAT_COLORS = ["#2356D6", "#119BEA", "#00E0FF"];
 
 /* icon glyphs for the feature grid, reach badges and trusted-by row */
 const ICON_PATHS: Record<string, string> = {
@@ -77,7 +79,7 @@ export default function Company() {
       // overflow-x-clip: the panel enters from off-screen right, and a
       // transform still counts toward scrollable overflow. `clip` (not
       // `hidden`) avoids turning this into a scroll container.
-      className="grain relative z-20 overflow-x-clip rounded-t-[28px] bg-ink pt-24 pb-28 sm:rounded-t-[40px] sm:pt-32 lg:pb-36"
+      className="grain relative z-20 overflow-x-clip rounded-t-[28px] bg-ink pt-24 pb-28 sm:rounded-t-[40px] sm:pt-32 lg:pb-36 [@media(min-width:1024px)_and_(max-height:840px)]:pt-20"
       style={{ boxShadow: "0 -40px 100px -20px rgba(8,11,20,0.95)" }}
     >
       {/* soft brand wash behind the globe */}
@@ -91,7 +93,7 @@ export default function Company() {
       />
 
       <div className="relative mx-auto max-w-[1240px] px-6 lg:px-10">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_1.02fr] lg:items-start lg:gap-14">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_1.02fr] lg:items-stretch lg:gap-14">
           {/* ---------------- left column ---------------- */}
           <div>
             <Pill>{whoWeAre.eyebrow}</Pill>
@@ -138,7 +140,7 @@ export default function Company() {
                   <div key={s.label}>
                     <span
                       className="display block text-[clamp(1.6rem,2.8vw,2rem)]"
-                      style={{ color: STAT_COLORS[i] }}
+                      style={{ color: STAT_COLORS[i % STAT_COLORS.length] }}
                     >
                       {s.value}
                     </span>
@@ -151,11 +153,11 @@ export default function Company() {
 
               <div className="border-t border-brand-soft/14 px-6 py-5">
                 <span className="eyebrow text-paper-2/35">Trusted by</span>
-                <div className="mt-3 flex flex-wrap gap-x-6 gap-y-3">
+                <div className="mt-3 flex flex-nowrap items-center justify-between gap-x-3 overflow-x-auto sm:gap-x-5">
                   {whoWeAreTrustedBy.map((t) => (
                     <span
                       key={t.label}
-                      className="flex items-center gap-2 text-[0.82rem] text-paper-2/60"
+                      className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[0.78rem] text-paper-2/60 sm:text-[0.82rem]"
                     >
                       <Icon name={t.icon} className="size-4 shrink-0 text-brand-2/80" />
                       {t.label}
@@ -168,13 +170,13 @@ export default function Company() {
 
           {/* ---------------- right column: the globe ---------------- */}
           <ScrollIn progress={scrollYProgress}>
-            <div className="card-dark card-glow overflow-hidden rounded-[26px] text-paper">
+            <div className="card-dark card-glow overflow-hidden rounded-[26px] text-paper lg:flex lg:h-full lg:flex-col">
               {/* reach badges, floating over the live globe */}
-              <div className="relative flex min-h-[420px] flex-col justify-between overflow-hidden p-6 sm:min-h-[480px] sm:p-8">
+              <div className="relative flex min-h-[460px] flex-col justify-between gap-8 overflow-hidden p-5 sm:min-h-[560px] sm:p-7 lg:min-h-[320px] lg:flex-1">
                 {/* the globe sits centered behind the badge quadrants */}
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.85]"
+                  className="pointer-events-none absolute inset-x-[-8%] inset-y-0 flex items-center justify-center"
                 >
                   <GlobeReach />
                 </div>
@@ -183,7 +185,7 @@ export default function Company() {
                   (row, rowIdx) => (
                     <div
                       key={rowIdx}
-                      className="relative flex flex-wrap justify-between gap-3 sm:flex-nowrap sm:gap-4"
+                      className="relative flex justify-between gap-3 sm:gap-4"
                     >
                       {row.map((b, i) => {
                         const idx = rowIdx * 2 + i;
@@ -198,7 +200,11 @@ export default function Company() {
                               delay: 0.15 + idx * 0.08,
                               ease: [0.16, 1, 0.3, 1],
                             }}
-                            className="flex w-full max-w-[15.5rem] items-start gap-3 rounded-xl bg-ink/55 p-4 ring-1 ring-paper/12 backdrop-blur-md"
+                            className="flex w-[calc(50%-0.375rem)] max-w-[15rem] items-start gap-2.5 rounded-2xl bg-[#0a1730]/72 p-3 ring-1 ring-[#5b96e0]/22 backdrop-blur-md sm:w-full sm:gap-3 sm:p-4"
+                            style={{
+                              boxShadow:
+                                "0 18px 44px -18px rgba(6,12,30,0.9), inset 0 1px 0 rgba(160,205,255,0.08)",
+                            }}
                           >
                             <span
                               className="grid size-9 shrink-0 place-items-center rounded-lg text-brand-2"
@@ -210,10 +216,10 @@ export default function Company() {
                               <Icon name={b.icon} className="size-4.5" />
                             </span>
                             <span className="min-w-0">
-                              <span className="block text-[0.85rem] font-semibold leading-tight text-paper">
+                              <span className="block text-[0.78rem] font-semibold leading-tight text-paper sm:text-[0.85rem]">
                                 {b.label}
                               </span>
-                              <span className="mt-1 block text-[0.78rem] leading-snug text-paper-2/50">
+                              <span className="mt-1 block text-[0.7rem] leading-snug text-paper-2/50 sm:text-[0.78rem]">
                                 {b.caption}
                               </span>
                             </span>
@@ -247,16 +253,16 @@ export default function Company() {
               <div className="h-px bg-brand-soft/14" />
 
               {/* domains served strip */}
-              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-4 px-6 py-5 sm:px-8">
+              <div className="flex flex-nowrap items-center justify-between gap-x-3 overflow-x-auto px-6 py-5 sm:gap-x-4 sm:px-8">
                 {whoWeAreDomains.map((d) => (
                   <span
                     key={d.label}
-                    className="flex flex-col items-center gap-2 text-center"
+                    className="flex shrink-0 flex-col items-center gap-2 text-center"
                   >
                     <span className="grid size-9 place-items-center rounded-full bg-paper/5 text-paper-2/70 ring-1 ring-brand-soft/14">
                       <Icon name={d.icon} className="size-4" />
                     </span>
-                    <span className="text-[0.68rem] leading-tight text-paper-2/45">
+                    <span className="whitespace-nowrap text-[0.68rem] leading-tight text-paper-2/45">
                       {d.label}
                     </span>
                   </span>
@@ -284,5 +290,9 @@ function ScrollIn({
   const x = useTransform(progress, [0, 0.72], [220, 0]);
   const opacity = useTransform(progress, [0, 0.45], [0, 1]);
 
-  return <motion.div style={{ x, opacity }}>{children}</motion.div>;
+  return (
+    <motion.div className="lg:h-full" style={{ x, opacity }}>
+      {children}
+    </motion.div>
+  );
 }
