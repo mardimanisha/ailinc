@@ -49,9 +49,17 @@ export default function PortfolioTabs({ projects }: { projects: Project[] }) {
       {/* preload every project's imagery up front so switching tabs never
           shows a blank/loading image — by the time a card is clicked its
           image is already in the browser cache */}
-      <div aria-hidden className="absolute h-0 w-0 overflow-hidden opacity-0">
+      <div aria-hidden className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0">
         {projects.map((p) => (
-          <Image key={p.image} src={p.image} alt="" width={1} height={1} priority />
+          <div key={p.image} className="relative h-64 sm:h-72 md:h-auto md:min-h-[26rem]">
+            <Image
+              src={p.image}
+              alt=""
+              fill
+              sizes="(min-width:768px) 50vw, 100vw"
+              priority
+            />
+          </div>
         ))}
       </div>
 
