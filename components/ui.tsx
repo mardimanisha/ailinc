@@ -151,7 +151,10 @@ export function RotatingWord({
   return (
     <span
       ref={ref}
-      className={clsx("relative inline-block overflow-hidden align-bottom", className)}
+      className={clsx(
+        "relative inline-block overflow-hidden align-bottom pb-[0.2em] -mb-[0.2em]",
+        className
+      )}
       style={{ color: "var(--color-brand-2)" }}
     >
       <AnimatePresence mode="popLayout" initial={false}>
