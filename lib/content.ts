@@ -1011,6 +1011,7 @@ export const press = [
   },
   {
     image: "/linkedIn/1784618548650.jpg",
+    event: "zskillup-prephasz",
     tag: "Panel",
     category: "Talks",
     outlet: "Industry Leadership Panel, moderated by Shubham Lal",
@@ -1021,6 +1022,7 @@ export const press = [
   },
   {
     image: "/linkedIn/1785848002390.jpg",
+    event: "zskillup-prephasz",
     tag: "Product Launch",
     category: "Talks",
     outlet: "prephasz by ZSkillup, in partnership with AILinc",

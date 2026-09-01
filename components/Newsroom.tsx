@@ -6,7 +6,33 @@ import { useEffect, useMemo, useState } from "react";
 import { Chevron, Pill, Reveal, Words } from "./ui";
 import { press } from "@/lib/content";
 
-type PressItem = (typeof press)[number];
+type PressItem = (typeof press)[number] & { event?: string };
+
+/**
+ * One clipping per event. Several outlets covered the same moment (the
+ * Osmania MoU signing alone ran in eight papers), and eight near-identical
+ * newsprint scans in the bento reads as filler rather than reach — so
+ * items sharing an `event` collapse to a single representative. A featured
+ * item always wins that slot, since it also anchors the spotlight strip
+ * above and its siblings would otherwise duplicate it; otherwise the first
+ * in source order stands in. Items with no `event` are their own event.
+ */
+function onePerEvent(items: readonly PressItem[]) {
+  const chosen = new Map<string, PressItem>();
+  const singles: PressItem[] = [];
+  for (const item of items) {
+    if (!item.event) {
+      singles.push(item);
+      continue;
+    }
+    const held = chosen.get(item.event);
+    if (!held || (item.featured && !held.featured)) chosen.set(item.event, item);
+  }
+  const keep = new Set<PressItem>([...singles, ...chosen.values()]);
+  return items.filter((item) => keep.has(item));
+}
+
+const coverage: PressItem[] = onePerEvent(press);
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const PAGE_SIZE = 8;
@@ -93,10 +119,10 @@ export default function Newsroom() {
   const [visible, setVisible] = useState(PAGE_SIZE);
   const cols = useColumnCount();
 
-  const featured = useMemo(() => press.filter((p) => p.featured), []);
+  const featured = useMemo(() => coverage.filter((p) => p.featured), []);
 
   const rest = useMemo(() => {
-    const items = press.filter((p) => {
+    const items = coverage.filter((p) => {
       if (p.featured) return false;
       if (filter === "All") return true;
       return p.category === filter;
@@ -138,7 +164,7 @@ export default function Newsroom() {
             <Reveal delay={0.15} className="mt-6 max-w-[60ch]">
               <p className="text-sm leading-relaxed text-brand-deep/60">
                 Award recognitions, regional press coverage, and the talks and
-                milestones behind them — {press.length} clippings and counting.
+                milestones behind them — {coverage.length} clippings and counting.
               </p>
             </Reveal>
           </div>
