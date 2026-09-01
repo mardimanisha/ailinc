@@ -190,6 +190,15 @@ export default function PortfolioTabs({ projects }: { projects: Project[] }) {
 
             <div className="h-px w-full bg-gradient-to-r from-brand-deep/10 via-brand-deep/10 to-transparent" />
 
+            <span className="flex w-fit shrink-0 items-center gap-2 rounded-full bg-brand-deep/[0.04] py-1.5 pl-1.5 pr-3 ring-1 ring-brand-deep/10">
+              <span className="relative h-5 w-7 shrink-0 overflow-hidden rounded-[3px] shadow-sm ring-1 ring-brand-deep/10">
+                <Image src={project.flag} alt={project.country} fill sizes="28px" className="object-cover" />
+              </span>
+              <span className="text-[0.65rem] font-medium uppercase tracking-[0.1em] text-brand-deep/60">
+                {project.country}
+              </span>
+            </span>
+
             <ul className="flex flex-wrap gap-2">
               {project.tags.map((t) => (
                 <li

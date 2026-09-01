@@ -37,16 +37,95 @@ export const stats = [
 
 export const whoWeAre = {
   eyebrow: "Who we are",
-  title: ["Engineering, built on", "one", "AI backbone"],
-  body: "AI LINC is a Hyderabad-based technology company. We design, build and secure production systems for enterprise and public-sector clients, led by founders with enterprise engineering backgrounds and a single delivery team.",
+  title: ["We build any tech product", "for any"],
+  rotatingWords: ["country", "organization", "individual"],
+  body: "From powerful government platforms to enterprise systems and disruptive consumer apps — if you can imagine it, we can build it.",
+  stats: [
+    { value: "5+", label: "Countries We Operate In" },
+    { value: "20+", label: "Projects Delivered" },
+    { value: "24/7", label: "Global Delivery & Support" },
+  ],
   reach: {
     kicker: "Wherever you operate",
-    scope: ["Any company", "Any domain", "Any segment", "Any country"],
     lead: "AI, web and content solutions — engineered around whatever you bring us.",
     statement: "Any tech product, one tech team —",
     statementHighlight: "we deliver it.",
+    badges: [
+      {
+        icon: "globe",
+        label: "Any Country",
+        caption: "Localized. Compliant. Delivered.",
+      },
+      {
+        icon: "landmark",
+        label: "Any Government",
+        caption: "Digital transformation at scale.",
+      },
+      {
+        icon: "layers",
+        label: "Any Organization",
+        caption: "Custom systems that drive real impact.",
+      },
+      {
+        icon: "users",
+        label: "Any Individual",
+        caption: "Your idea. Our tech. Limitless possibilities.",
+      },
+    ],
+    cta: {
+      title: "One Requirement. Infinite Possibilities.",
+      body: "Share your idea or requirement — our team turns it into a powerful, real-world solution.",
+      button: "Let's Build Together",
+      expertsCount: "100+",
+    },
   },
 };
+
+export const whoWeAreFeatures = [
+  {
+    icon: "cube",
+    accent: "#2356D6",
+    title: "AI-Powered",
+    body: "Intelligent solutions at every layer.",
+  },
+  {
+    icon: "shield",
+    accent: "#22C55E",
+    title: "Secure by Design",
+    body: "Enterprise-grade security & compliance.",
+  },
+  {
+    icon: "rocket",
+    accent: "#A855F7",
+    title: "Scalable & Reliable",
+    body: "Built to scale across users and borders.",
+  },
+  {
+    icon: "users",
+    accent: "#F97316",
+    title: "Built for Everyone",
+    body: "Governments, enterprises, startups & individuals.",
+  },
+] as const;
+
+export const whoWeAreTrustedBy = [
+  { icon: "landmark", label: "Governments" },
+  { icon: "building", label: "Enterprises" },
+  { icon: "rocket", label: "Startups" },
+  { icon: "heart", label: "NGOs" },
+  { icon: "users", label: "Individuals" },
+] as const;
+
+export const whoWeAreDomains = [
+  { icon: "landmark", label: "Government" },
+  { icon: "heart", label: "Healthcare" },
+  { icon: "finance", label: "Finance" },
+  { icon: "cap", label: "Education" },
+  { icon: "truck", label: "Logistics" },
+  { icon: "bag", label: "Retail" },
+  { icon: "building", label: "Real Estate" },
+  { icon: "more", label: "& More" },
+] as const;
 
 export const operatingCountries = [
   { name: "Saudi Arabia", code: "SA", flag: "/flags/sa.png" },
@@ -65,15 +144,43 @@ export const deliveryProcess = [
   { step: "05", label: "Scale", detail: "Grows with you, wherever you operate next." },
 ];
 
-export const capabilityTags = [
-  "Product Development",
-  "AI Prototyping",
-  "Web & Mobile Apps",
-  "Custom Software",
-  "AI Tools & Agents",
-  "Workflow Automation",
-  "AI Integration",
-];
+export const buildCapabilities = [
+  {
+    title: "Product Development",
+    detail: "We build digital products from scratch to scale.",
+    bullets: ["SaaS Platforms", "Enterprise Systems", "Consumer Products"],
+  },
+  {
+    title: "AI Prototyping",
+    detail: "Validate ideas faster with AI prototypes and MVPs.",
+    bullets: ["AI MVPs", "Proof of Concepts", "Rapid Experimentation"],
+  },
+  {
+    title: "Web & Mobile Apps",
+    detail: "High-performance web and mobile applications that users love.",
+    bullets: ["iOS / Android Apps", "Web Applications", "Cross-platform Solutions"],
+  },
+  {
+    title: "Custom Software",
+    detail: "Tailored software to fit your unique business processes.",
+    bullets: ["Enterprise Software", "Workflow Systems", "Business Automation"],
+  },
+  {
+    title: "AI Tools & Agents",
+    detail: "Intelligent tools and agents that augment work and decisions.",
+    bullets: ["AI Assistants", "Chatbots & Agents", "Smart Analytics"],
+  },
+  {
+    title: "Workflow Automation",
+    detail: "Automate processes. Save time. Improve efficiency.",
+    bullets: ["Process Automation", "API Integrations", "RPA & AI Workflows"],
+  },
+  {
+    title: "AI Integration",
+    detail: "Integrate AI capabilities into your existing systems and products.",
+    bullets: ["Model Integration", "Data Pipelines", "AI-Driven Features"],
+  },
+] as const;
 
 export const domainFocus = [
   "Enterprise",

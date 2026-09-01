@@ -1,10 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import clsx from "clsx";
-import { operatingCountries } from "@/lib/content";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 /* -------------------------------------------------------------
    Coarse land outlines, [lng, lat]. These are only ever sampled at
@@ -47,17 +43,29 @@ const LAND: [number, number][][] = [
   [[166, -46], [174, -41], [178, -37], [173, -34], [168, -44]],
 ];
 
-/** Real coordinates for each delivery country, keyed by ISO code. */
-const NODES: Record<string, { lat: number; lng: number; city: string }> = {
-  SA: { lat: 24.71, lng: 46.68, city: "Riyadh" },
-  AE: { lat: 25.2, lng: 55.27, city: "Dubai" },
-  SG: { lat: 1.35, lng: 103.82, city: "Singapore" },
-  LK: { lat: 6.93, lng: 79.86, city: "Colombo" },
-  IN: { lat: 17.38, lng: 78.49, city: "Hyderabad" },
-  AU: { lat: -33.87, lng: 151.21, city: "Sydney" },
-};
+/**
+ * Network points fanning out from the India hub. The other stops are
+ * generic — not tied to any real office — so the globe reads as "reach
+ * everywhere," not "here's exactly where we are."
+ */
+const NODES: { lat: number; lng: number }[] = [
+  { lat: 20, lng: 78 }, // hub — India
+  { lat: 40, lng: -75 },
+  { lat: 55, lng: -100 },
+  { lat: 19, lng: -99 },
+  { lat: -10, lng: -50 },
+  { lat: 52, lng: -1 },
+  { lat: 55, lng: 60 },
+  { lat: 25, lng: 45 },
+  { lat: 12, lng: 18 },
+  { lat: 35, lng: 105 },
+  { lat: 36, lng: 138 },
+  { lat: 4, lng: 105 },
+  { lat: -25, lng: 135 },
+  { lat: -27, lng: 25 },
+  { lat: 9, lng: 8 },
+];
 
-const HQ = "IN";
 const RAD = Math.PI / 180;
 
 function pointInPolygon(x: number, y: number, poly: [number, number][]) {
@@ -70,14 +78,25 @@ function pointInPolygon(x: number, y: number, poly: [number, number][]) {
   return hit;
 }
 
-/** Roughly equal-area dot lattice, land only. */
+/**
+ * A full-sphere Fibonacci lattice — every point on the globe gets a dot,
+ * not just land, so the sphere itself reads as a solid mesh with
+ * continents picked out as brighter clusters.
+ */
 function buildDots() {
-  const dots: { lat: number; lng: number }[] = [];
-  for (let lat = -84; lat <= 84; lat += 2.2) {
-    const step = 2.2 / Math.max(0.25, Math.cos(lat * RAD));
-    for (let lng = -180; lng < 180; lng += step) {
-      if (LAND.some((p) => pointInPolygon(lng, lat, p))) dots.push({ lat, lng });
-    }
+  const dots: { lat: number; lng: number; land: boolean }[] = [];
+  const n = 4200;
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < n; i++) {
+    const y = 1 - (i / (n - 1)) * 2;
+    const radius = Math.sqrt(Math.max(0, 1 - y * y));
+    const theta = golden * i;
+    const x = Math.cos(theta) * radius;
+    const z = Math.sin(theta) * radius;
+    const lat = Math.asin(y) / RAD;
+    const lng = Math.atan2(x, z) / RAD;
+    const land = LAND.some((p) => pointInPolygon(lng, lat, p));
+    dots.push({ lat, lng, land });
   }
   return dots;
 }
@@ -117,34 +136,32 @@ function arcPoint(a: Vec, b: Vec, t: number, lift: number): Vec {
 }
 
 /**
- * The section's centrepiece: a draggable dot-globe with live routes
- * running out of the Hyderabad HQ to every delivery country.
+ * The section's centrepiece: a fixed dot-globe with a starburst of
+ * routes fanning out from the India hub across the world. It holds
+ * still — only the travelling packets and marker glow animate.
  */
-export default function GlobeReach({
-  selected,
-  onSelect,
-}: {
-  selected: string;
-  onSelect: (code: string) => void;
-}) {
+export default function GlobeReach() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [hover, setHover] = useState<string | null>(null);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
   const dots = useMemo(buildDots, []);
+  // Pre-convert each land outline to sphere vectors once — coastlines stay
+  // fixed relative to the globe, only the yaw/pitch rotation moves them.
+  const coastlines = useMemo(() => LAND.map((poly) => poly.map(([lng, lat]) => toVec(lat, lng))), []);
 
   // Everything the render loop reads without wanting to restart on change.
+  // yaw/pitch are fixed so the India hub sits front-and-centre — the
+  // globe holds still, only the route packets travel.
   const state = useRef({
-    yaw: -1.2,
-    pitch: 0.32,
+    yaw: -1.36,
+    pitch: 0.3,
     drag: null as null | { x: number; y: number; yaw: number; pitch: number },
-    selected,
-    hover: null as string | null,
-    hits: [] as { code: string; x: number; y: number }[],
+    hover: null as number | null,
+    hits: [] as { idx: number; x: number; y: number }[],
     size: 0,
   });
-  state.current.selected = selected;
-  state.current.hover = hover;
+  state.current.hover = hoverIdx;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -159,7 +176,7 @@ export default function GlobeReach({
     let dpr = 1;
 
     const resize = () => {
-      const size = Math.max(220, Math.min(wrap.clientWidth, 390));
+      const size = Math.max(220, Math.min(wrap.clientWidth, 460));
       dpr = Math.min(2, window.devicePixelRatio || 1);
       canvas.width = size * dpr;
       canvas.height = size * dpr;
@@ -188,95 +205,94 @@ export default function GlobeReach({
 
       const s = state.current;
       const size = s.size;
-      const R = size * 0.37;
+      const R = size * 0.42;
       const cx = size / 2;
       const cy = size / 2;
-
-      // Ease the selected node round to face the viewer, then drift on.
-      if (!s.drag) {
-        const node = NODES[s.selected];
-        if (node) {
-          const target = -node.lng * RAD;
-          let d = target - s.yaw;
-          while (d > Math.PI) d -= 2 * Math.PI;
-          while (d < -Math.PI) d += 2 * Math.PI;
-          s.yaw += d * Math.min(1, dt / 700);
-          if (!reduced && Math.abs(d) < 0.02) s.yaw += 0.00004 * dt;
-        } else if (!reduced) {
-          s.yaw += 0.00009 * dt;
-        }
-      }
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, size, size);
 
-      // atmosphere
-      const halo = ctx.createRadialGradient(cx, cy, R * 0.75, cx, cy, R * 1.55);
-      halo.addColorStop(0, "rgba(0,224,255,0.15)");
-      halo.addColorStop(0.45, "rgba(35,86,214,0.09)");
+      // atmosphere — a wide, vivid blue glow
+      const halo = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 1.85);
+      halo.addColorStop(0, "rgba(40,140,255,0.45)");
+      halo.addColorStop(0.45, "rgba(35,86,214,0.22)");
       halo.addColorStop(1, "rgba(8,11,20,0)");
       ctx.fillStyle = halo;
       ctx.beginPath();
-      ctx.arc(cx, cy, R * 1.55, 0, Math.PI * 2);
+      ctx.arc(cx, cy, R * 1.85, 0, Math.PI * 2);
       ctx.fill();
 
-      // ocean body
+      // ocean body — a lit, saturated blue so the network reads clearly
       const body = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R);
-      body.addColorStop(0, "rgba(30,40,72,0.95)");
-      body.addColorStop(1, "rgba(8,11,20,0.98)");
+      body.addColorStop(0, "rgba(24,60,130,0.96)");
+      body.addColorStop(0.6, "rgba(12,32,78,0.97)");
+      body.addColorStop(1, "rgba(6,14,36,0.99)");
       ctx.fillStyle = body;
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "rgba(109,148,255,0.22)";
+      ctx.strokeStyle = "rgba(120,195,255,0.4)";
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // graticule
-      ctx.strokeStyle = "rgba(109,148,255,0.10)";
-      for (let lat = -60; lat <= 60; lat += 30) {
+      // full-sphere dot mesh — land clusters bright, ocean dots dim but present
+      for (const d of dots) {
+        const p = rotate(toVec(d.lat, d.lng), s.yaw, s.pitch);
+        if (p.z <= 0.02) continue;
+        if (d.land) {
+          const a = 0.55 + 0.45 * p.z;
+          ctx.fillStyle = `rgba(190,230,255,${a.toFixed(3)})`;
+          ctx.beginPath();
+          ctx.arc(cx + p.x * R, cy - p.y * R, 1 + p.z, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          const a = 0.07 + 0.14 * p.z;
+          ctx.fillStyle = `rgba(80,135,205,${a.toFixed(3)})`;
+          ctx.beginPath();
+          ctx.arc(cx + p.x * R, cy - p.y * R, 0.5 + 0.45 * p.z, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // coastline outlines — crisp edges on top of the dot mesh so each
+      // continent's silhouette reads clearly, not just a speckle cluster.
+      ctx.strokeStyle = "rgba(215,238,255,0.55)";
+      ctx.lineWidth = 1.1;
+      for (const poly of coastlines) {
         ctx.beginPath();
         let started = false;
-        for (let lng = -180; lng <= 180; lng += 4) {
-          const p = rotate(toVec(lat, lng), s.yaw, s.pitch);
-          if (p.z <= 0) {
+        let prevZ = -1;
+        for (let i = 0; i <= poly.length; i++) {
+          const v = poly[i % poly.length];
+          const p = rotate(v, s.yaw, s.pitch);
+          if (p.z <= 0.02) {
             started = false;
+            prevZ = p.z;
             continue;
           }
           const x = cx + p.x * R;
           const y = cy - p.y * R;
-          if (started) ctx.lineTo(x, y);
-          else {
-            ctx.moveTo(x, y);
-            started = true;
-          }
+          if (started && prevZ > 0.02) ctx.lineTo(x, y);
+          else ctx.moveTo(x, y);
+          started = true;
+          prevZ = p.z;
         }
         ctx.stroke();
       }
 
-      // land dots
-      for (const d of dots) {
-        const p = rotate(toVec(d.lat, d.lng), s.yaw, s.pitch);
-        if (p.z <= 0.02) continue;
-        const a = 0.14 + 0.66 * p.z;
-        ctx.fillStyle = `rgba(154,199,255,${a.toFixed(3)})`;
-        ctx.beginPath();
-        ctx.arc(cx + p.x * R, cy - p.y * R, 0.5 + 0.75 * p.z, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // routes out of the HQ
-      const hq = toVec(NODES[HQ].lat, NODES[HQ].lng);
-      const codes = Object.keys(NODES).filter((c) => c !== HQ);
-      codes.forEach((code, i) => {
-        const dest = toVec(NODES[code].lat, NODES[code].lng);
-        const live = s.selected === code || s.hover === code;
+      // starburst — every route fans out of the one hub node, evenly bright
+      const hub = toVec(NODES[0].lat, NODES[0].lng);
+      for (let i = 1; i < NODES.length; i++) {
+        const dest = toVec(NODES[i].lat, NODES[i].lng);
+        const live = s.hover === i;
         const steps = 64;
-        ctx.lineWidth = live ? 1.8 : 1;
+        ctx.lineWidth = live ? 2.4 : 1.6;
+        ctx.shadowColor = "rgba(70,180,255,0.9)";
+        ctx.shadowBlur = live ? 18 : 10;
         ctx.beginPath();
         let started = false;
         for (let k = 0; k <= steps; k++) {
-          const p = rotate(arcPoint(hq, dest, k / steps, 0.28), s.yaw, s.pitch);
+          const p = rotate(arcPoint(hub, dest, k / steps, 0.28), s.yaw, s.pitch);
           if (p.z <= -0.08) {
             started = false;
             continue;
@@ -289,74 +305,48 @@ export default function GlobeReach({
             started = true;
           }
         }
-        ctx.strokeStyle = live ? "rgba(0,224,255,0.85)" : "rgba(0,224,255,0.26)";
+        ctx.strokeStyle = live ? "rgba(190,235,255,0.98)" : "rgba(80,180,255,0.75)";
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
         // travelling packet
-        const t = reduced ? 0.5 : (now / 2600 + i * 0.19) % 1;
-        const pk = rotate(arcPoint(hq, dest, t, 0.28), s.yaw, s.pitch);
+        const t = reduced ? 0.5 : (now / 2800 + i * 0.13) % 1;
+        const pk = rotate(arcPoint(hub, dest, t, 0.28), s.yaw, s.pitch);
         if (pk.z > -0.05) {
-          ctx.fillStyle = live ? "rgba(255,255,255,0.95)" : "rgba(0,224,255,0.7)";
+          ctx.fillStyle = "rgba(220,245,255,0.9)";
           ctx.beginPath();
-          ctx.arc(cx + pk.x * R, cy - pk.y * R, live ? 2.6 : 1.8, 0, Math.PI * 2);
+          ctx.arc(cx + pk.x * R, cy - pk.y * R, live ? 2.4 : 1.8, 0, Math.PI * 2);
           ctx.fill();
         }
-      });
+      }
 
-      // markers
-      const hits: { code: string; x: number; y: number }[] = [];
-      for (const code of Object.keys(NODES)) {
-        const p = rotate(toVec(NODES[code].lat, NODES[code].lng), s.yaw, s.pitch);
-        if (p.z <= 0) continue;
+      // markers — every node styled the same, hover just brightens it
+      const hits: { idx: number; x: number; y: number }[] = [];
+      NODES.forEach((node, idx) => {
+        const p = rotate(toVec(node.lat, node.lng), s.yaw, s.pitch);
+        if (p.z <= 0) return;
         const x = cx + p.x * R;
         const y = cy - p.y * R;
-        hits.push({ code, x, y });
+        hits.push({ idx, x, y });
 
-        const isHq = code === HQ;
-        const live = s.selected === code || s.hover === code;
+        const live = s.hover === idx;
         const fade = Math.min(1, p.z * 2.4);
 
-        if (live || isHq) {
-          const pulse = reduced ? 0.4 : (now / (isHq ? 1900 : 1400) + (isHq ? 0 : 0.4)) % 1;
-          ctx.strokeStyle = `rgba(0,224,255,${((1 - pulse) * 0.55 * fade).toFixed(3)})`;
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.arc(x, y, 5 + pulse * 16, 0, Math.PI * 2);
-          ctx.stroke();
-        }
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, live ? 13 : 9);
+        glow.addColorStop(0, `rgba(120,210,255,${(0.55 * fade).toFixed(3)})`);
+        glow.addColorStop(1, "rgba(120,210,255,0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, live ? 13 : 9, 0, Math.PI * 2);
+        ctx.fill();
 
         ctx.fillStyle = live
           ? `rgba(255,255,255,${fade})`
-          : isHq
-            ? `rgba(0,224,255,${fade})`
-            : `rgba(109,148,255,${(0.85 * fade).toFixed(3)})`;
+          : `rgba(150,210,255,${(0.95 * fade).toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(x, y, live ? 4.4 : 3.2, 0, Math.PI * 2);
+        ctx.arc(x, y, live ? 4.4 : 3.4, 0, Math.PI * 2);
         ctx.fill();
-
-        if (live) {
-          ctx.strokeStyle = `rgba(0,224,255,${fade})`;
-          ctx.lineWidth = 1.4;
-          ctx.beginPath();
-          ctx.arc(x, y, 8.5, 0, Math.PI * 2);
-          ctx.stroke();
-
-          const label = `${NODES[code].city.toUpperCase()}${isHq ? " · HQ" : ""}`;
-          ctx.font = "600 10px ui-sans-serif, system-ui, sans-serif";
-          const w = ctx.measureText(label).width;
-          const bx = Math.min(Math.max(x - w / 2 - 7, 4), size - w - 18);
-          const by = y - 30;
-          ctx.fillStyle = "rgba(12,17,32,0.92)";
-          ctx.beginPath();
-          ctx.roundRect(bx, by, w + 14, 20, 6);
-          ctx.fill();
-          ctx.strokeStyle = "rgba(0,224,255,0.35)";
-          ctx.lineWidth = 1;
-          ctx.stroke();
-          ctx.fillStyle = "rgba(242,244,250,0.95)";
-          ctx.fillText(label, bx + 7, by + 14);
-        }
-      }
+      });
       s.hits = hits;
     };
 
@@ -366,38 +356,31 @@ export default function GlobeReach({
       ro.disconnect();
       io.disconnect();
     };
-  }, [dots]);
+  }, [dots, coastlines]);
 
-  const nearest = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
+  const nearest = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const px = e.clientX - rect.left;
     const py = e.clientY - rect.top;
-    let best: string | null = null;
-    let bd = 20;
+    let best: number | null = null;
+    let bd = 16;
     for (const h of state.current.hits) {
       const d = Math.hypot(h.x - px, h.y - py);
       if (d < bd) {
         bd = d;
-        best = h.code;
+        best = h.idx;
       }
     }
     return best;
-  }, []);
-
-  const active = operatingCountries.find((c) => c.code === selected);
+  };
 
   return (
     <div ref={wrapRef} className="relative w-full">
       <canvas
         ref={canvasRef}
         className="mx-auto block touch-none select-none"
-        style={{ cursor: hover ? "pointer" : "grab" }}
+        style={{ cursor: "grab" }}
         onPointerDown={(e) => {
-          const hit = nearest(e);
-          if (hit) {
-            onSelect(hit);
-            return;
-          }
           e.currentTarget.setPointerCapture(e.pointerId);
           state.current.drag = {
             x: e.clientX,
@@ -416,66 +399,16 @@ export default function GlobeReach({
             );
             return;
           }
-          setHover(nearest(e));
+          setHoverIdx(nearest(e));
         }}
         onPointerUp={() => {
           state.current.drag = null;
         }}
         onPointerLeave={() => {
           state.current.drag = null;
-          setHover(null);
+          setHoverIdx(null);
         }}
       />
-
-      {/* country selector */}
-      <div className="-mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {operatingCountries.map((c) => {
-          const on = selected === c.code;
-          return (
-            <button
-              key={c.code}
-              type="button"
-              onClick={() => onSelect(c.code)}
-              onMouseEnter={() => setHover(c.code)}
-              onMouseLeave={() => setHover(null)}
-              aria-pressed={on}
-              className={clsx(
-                "flex items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3 text-xs font-medium transition-all duration-300",
-                on
-                  ? "text-brand-deep"
-                  : "bg-ink-3/70 text-paper-2/60 ring-1 ring-brand-soft/15 hover:text-paper hover:ring-brand-2/40"
-              )}
-              style={on ? { background: "var(--brand-grad)" } : undefined}
-            >
-              <span className="relative size-5 overflow-hidden rounded-full ring-1 ring-ink-4">
-                <Image src={c.flag} alt="" fill sizes="20px" className="object-cover" />
-              </span>
-              {c.name}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* min-h: the caption swaps with mode="wait", so the box must not collapse */}
-      <div className="mt-4 flex min-h-[2.9rem] items-center rounded-2xl bg-ink/45 px-5 py-3 ring-1 ring-brand-soft/12">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selected}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="flex w-full flex-wrap items-baseline justify-between gap-x-4 gap-y-1"
-          >
-            <span className="text-sm font-medium text-paper">{active?.name}</span>
-            <span className="text-[0.68rem] uppercase tracking-[0.14em] text-brand-2/75">
-              {selected === HQ
-                ? "Hyderabad · headquarters"
-                : `${NODES[selected]?.city} · delivery`}
-            </span>
-          </motion.div>
-        </AnimatePresence>
-      </div>
     </div>
   );
 }

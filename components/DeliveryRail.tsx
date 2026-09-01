@@ -10,9 +10,9 @@ import {
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import StageArt from "./StageArt";
-import { Chevron } from "./ui";
+import CapabilityArt from "./CapabilityArt";
 import {
-  capabilityTags,
+  buildCapabilities,
   deliveryProcess,
   domainFocus,
   domainImages,
@@ -20,17 +20,6 @@ import {
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const DWELL = 3600;
-
-/* Line glyphs, one per capability — index-matched to capabilityTags. */
-const GLYPHS = [
-  "M4 17V7l8-3 8 3v10l-8 3-8-3Zm8-9v12", // product
-  "M12 3v4m0 10v4M3 12h4m10 0h4M12 9.5A2.5 2.5 0 1 0 12 14.5a2.5 2.5 0 0 0 0-5Z", // prototyping
-  "M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 15h4", // apps
-  "M8 6 3 12l5 6m8-12 5 6-5 6M14 4l-4 16", // custom software
-  "M12 4a4 4 0 0 1 4 4v1a4 4 0 0 1 0 7v1a4 4 0 0 1-8 0v-1a4 4 0 0 1 0-7V8a4 4 0 0 1 4-4Z", // agents
-  "M4 7h9m0 0-3-3m3 3-3 3m10 7h-9m0 0 3 3m-3-3 3-3", // automation
-  "M12 3v6m0 6v6M4.5 7.5l5 3m5 3 5 3m0-9-5 3m-5 3-5 3", // integration
-];
 
 /**
  * The brand gradient runs #2356D6 → #00E0FF. Every list here samples it
@@ -247,75 +236,181 @@ function StageStrip() {
 }
 
 /* -------------------------------------------------------------
-   What we build — a hairline list rather than another card grid.
+   What we build — a hub-and-spoke orbit. Seven capabilities ring a
+   centre stage; the ring advances on its own, yields to the
+   pointer, and the centre morphs its motif + copy to match.
 ------------------------------------------------------------- */
+const ORBIT_DWELL = 3200;
+
 function Capabilities() {
+  const n = buildCapabilities.length;
+  const [active, setActive] = useState(0);
+  const [held, setHeld] = useState(false);
+
+  useEffect(() => {
+    if (held) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setActive((i) => (i + 1) % n), ORBIT_DWELL);
+    return () => clearInterval(id);
+  }, [held, n]);
+
+  const cap = buildCapabilities[active];
+  const activeColor = ramp(active, n);
+
   return (
-    <div className="mt-24 grid grid-cols-1 gap-10 lg:mt-32 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-      <div>
-        <h4 className="display text-[clamp(1.6rem,2.8vw,2.2rem)] leading-tight text-paper">
-          What we <span className="text-grad italic">build</span>
-        </h4>
-        <p className="mt-4 max-w-[30ch] text-[0.88rem] leading-relaxed text-paper-2/45">
-          Seven practices, one team. Most engagements draw on several of them at
-          once.
+    <div className="mt-24 lg:mt-32">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-brand-soft/12 pb-7">
+        <div>
+          <span className="eyebrow text-brand-2/70">Our approach</span>
+          <h4 className="display mt-3 text-[clamp(1.6rem,2.8vw,2.2rem)] leading-tight text-paper">
+            What we <span className="text-grad italic">build</span>
+          </h4>
+        </div>
+        <p className="max-w-[36ch] text-[0.88rem] leading-relaxed text-paper-2/45">
+          Seven core capabilities, one team. Most engagements draw on several
+          of them at once.
         </p>
       </div>
 
-      <ul className="border-t border-brand-soft/12">
-        {capabilityTags.map((tag, i) => {
-          const c = ramp(i, capabilityTags.length);
-          return (
-            <motion.li
-              key={tag}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "0px 0px -60px 0px" }}
-              transition={{ duration: 0.55, delay: i * 0.05, ease: EASE }}
-              tabIndex={0}
-              className="group relative -mx-4 flex items-center gap-5 border-b border-brand-soft/12 px-4 py-5 outline-none transition-colors duration-300 hover:bg-paper/[0.035] focus-visible:bg-paper/[0.035] sm:gap-6"
-            >
-              <span
-                className="w-7 shrink-0 text-[0.62rem] font-semibold tabular-nums tracking-[0.14em]"
-                style={{ color: c }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
+      <div className="mt-14 grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,24rem)_1fr] lg:gap-16">
+        {/* the orbit */}
+        <div
+          className="relative mx-auto aspect-square w-full max-w-[21rem]"
+          onMouseLeave={() => setHeld(false)}
+        >
+          <svg viewBox="0 0 100 100" aria-hidden className="absolute inset-0 size-full overflow-visible">
+            {buildCapabilities.map((_, i) => {
+              const angle = ((-90 + (360 / n) * i) * Math.PI) / 180;
+              const x = 50 + 42 * Math.cos(angle);
+              const y = 50 + 42 * Math.sin(angle);
+              const on = active === i;
+              return (
+                <motion.line
+                  key={i}
+                  x1="50"
+                  y1="50"
+                  x2={x}
+                  y2={y}
+                  stroke={on ? ramp(i, n) : "rgba(232,236,247,0.14)"}
+                  strokeWidth={on ? 0.7 : 0.4}
+                  animate={{ opacity: on ? 0.9 : 0.5 }}
+                  transition={{ duration: 0.4, ease: EASE }}
+                />
+              );
+            })}
+          </svg>
 
-              <span
-                className="grid size-11 shrink-0 place-items-center rounded-xl transition-transform duration-500 group-hover:scale-110 group-focus-visible:scale-110"
+          {/* centre stage */}
+          <div className="absolute inset-[17%] grid place-items-center overflow-hidden rounded-full bg-ink-2 ring-1 ring-brand-soft/15">
+            <span
+              aria-hidden
+              className="absolute inset-0 transition-colors duration-700"
+              style={{ background: `radial-gradient(circle, ${ramp(active, n, 0.3)}, transparent 72%)` }}
+            />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={cap.title}
+                initial={{ opacity: 0, scale: 0.75, rotate: -8 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.75, rotate: 8 }}
+                transition={{ duration: 0.45, ease: EASE }}
+                style={{ "--art-a": activeColor, "--art-b": ramp(active, n, 0.7) } as React.CSSProperties}
+              >
+                <CapabilityArt name={cap.title} className="size-20 sm:size-24" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* orbiting nodes */}
+          {buildCapabilities.map((c, i) => {
+            const angle = ((-90 + (360 / n) * i) * Math.PI) / 180;
+            const x = 50 + 42 * Math.cos(angle);
+            const y = 50 + 42 * Math.sin(angle);
+            const on = active === i;
+            const col = ramp(i, n);
+            return (
+              <motion.button
+                key={c.title}
+                type="button"
+                aria-label={c.title}
+                aria-pressed={on}
+                onMouseEnter={() => {
+                  setHeld(true);
+                  setActive(i);
+                }}
+                onFocus={() => {
+                  setHeld(true);
+                  setActive(i);
+                }}
+                onClick={() => setActive(i)}
+                initial={false}
+                animate={{ scale: on ? 1.15 : 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="absolute grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full outline-none transition-colors duration-300 sm:size-11"
                 style={{
-                  background: `linear-gradient(140deg, ${ramp(i, capabilityTags.length, 0.22)}, ${ramp(i, capabilityTags.length, 0.04)})`,
-                  boxShadow: `inset 0 0 0 1px ${ramp(i, capabilityTags.length, 0.3)}`,
-                  color: c,
+                  left: `${x}%`,
+                  top: `${y}%`,
+                  background: on ? col : "rgba(232,236,247,0.06)",
+                  boxShadow: on ? `0 0 0 5px ${ramp(i, n, 0.16)}` : "inset 0 0 0 1px rgba(232,236,247,0.16)",
                 }}
               >
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden className="size-5">
-                  <path
-                    d={GLYPHS[i % GLYPHS.length]}
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
+                <span
+                  className="text-[0.6rem] font-semibold tabular-nums tracking-[0.08em]"
+                  style={{ color: on ? "#080B14" : "rgba(232,236,247,0.55)" }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
 
-              <span className="text-[1.05rem] font-medium leading-snug text-paper-2/75 transition-colors duration-300 group-hover:text-paper group-focus-visible:text-paper md:text-xl">
-                {tag}
-              </span>
-
-              {/* the rule draws itself out of the chevron on hover */}
+        {/* detail panel */}
+        <div className="relative min-h-[15rem]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={cap.title}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -14 }}
+              transition={{ duration: 0.45, ease: EASE }}
+            >
               <span
-                aria-hidden
-                className="ml-auto hidden h-px w-0 transition-all duration-500 group-hover:w-20 group-focus-visible:w-20 sm:block"
-                style={{ background: c }}
-              />
-              <Chevron className="ml-auto size-4 shrink-0 text-paper-2/25 transition-all duration-300 group-hover:translate-x-1 group-hover:text-brand-2 group-focus-visible:translate-x-1 group-focus-visible:text-brand-2 sm:ml-4" />
-            </motion.li>
-          );
-        })}
-      </ul>
+                className="text-[0.68rem] font-semibold tabular-nums tracking-[0.16em]"
+                style={{ color: activeColor }}
+              >
+                {String(active + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+              </span>
+              <h5 className="display mt-4 text-[clamp(1.9rem,3.6vw,2.8rem)] leading-tight text-paper">
+                {cap.title}
+              </h5>
+              <p className="mt-4 max-w-[46ch] text-[0.95rem] leading-relaxed text-paper-2/55">
+                {cap.detail}
+              </p>
+
+              <ul className="mt-7 flex flex-wrap gap-2.5">
+                {cap.bullets.map((b) => (
+                  <li
+                    key={b}
+                    className="flex items-center gap-2 rounded-full px-4 py-2 text-[0.8rem] text-paper-2/70 ring-1 ring-brand-soft/15"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden className="size-3.5 shrink-0" style={{ color: activeColor }}>
+                      <path
+                        d="M5 12.5 9.5 17 19 7"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 }

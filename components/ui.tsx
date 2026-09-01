@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView, useMotionValue, useSpring } from "motion/react";
-import { useEffect, useRef, type ReactNode } from "react";
+import { AnimatePresence, motion, useInView, useMotionValue, useSpring } from "motion/react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
 
 /* -------------------------------------------------------------
@@ -43,15 +43,19 @@ export function Words({
   className,
   delay = 0,
   italic,
+  highlight,
 }: {
   text: string;
   className?: string;
   delay?: number;
   /** words rendered in the display italic, as in the reference */
   italic?: string[];
+  /** words rendered in the brand accent color, as in the reference */
+  highlight?: string[];
 }) {
   const words = text.split(" ");
   const ref = useRef<HTMLSpanElement>(null);
+  let highlightOrder = 0;
 
   // Each mask fully clips its word while it sits at y:110%, and an
   // IntersectionObserver on a completely clipped element never reports a
@@ -64,7 +68,10 @@ export function Words({
           margin: the clip box then clears descenders (p, g, y) while the word
           stays on the same baseline, and the hidden word — parked a full 110%
           of its own height down — is still out of sight. */}
-      {words.map((word, i) => (
+      {words.map((word, i) => {
+        const isHighlighted = highlight?.includes(word.replace(/[.,]/g, ""));
+        const extraDelay = isHighlighted ? highlightOrder++ * 0.18 : 0;
+        return (
         <span
           key={`${word}-${i}`}
           className="inline-block overflow-hidden align-bottom pb-[0.2em] -mb-[0.2em]"
@@ -74,19 +81,91 @@ export function Words({
               "inline-block",
               italic?.includes(word.replace(/[.,]/g, "")) && "italic pr-[0.06em]"
             )}
-            initial={{ y: "110%", opacity: 0 }}
-            animate={inView ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
-            transition={{
-              duration: 1,
-              delay: delay + i * 0.055,
-              ease: [0.16, 1, 0.3, 1],
-            }}
+            style={isHighlighted ? { color: "var(--color-brand-2)" } : undefined}
+            initial={
+              isHighlighted
+                ? { y: "110%", opacity: 0, scale: 0.6 }
+                : { y: "110%", opacity: 0 }
+            }
+            animate={
+              inView
+                ? isHighlighted
+                  ? { y: "0%", opacity: 1, scale: 1 }
+                  : { y: "0%", opacity: 1 }
+                : isHighlighted
+                  ? { y: "110%", opacity: 0, scale: 0.6 }
+                  : { y: "110%", opacity: 0 }
+            }
+            transition={
+              isHighlighted
+                ? {
+                    delay: delay + i * 0.055 + extraDelay,
+                    type: "spring",
+                    stiffness: 280,
+                    damping: 18,
+                  }
+                : {
+                    duration: 1,
+                    delay: delay + i * 0.055,
+                    ease: [0.16, 1, 0.3, 1],
+                  }
+            }
           >
             {word}
             {i < words.length - 1 ? " " : ""}
           </motion.span>
         </span>
-      ))}
+        );
+      })}
+    </span>
+  );
+}
+
+/* -------------------------------------------------------------
+   RotatingWord — a single accent-colored slot that cycles through a
+   list of words on a hold/transition loop, each one sliding up and
+   fading in while the previous slides up and fades out (the
+   reference's "at TCS / at Infosys / at Wipro" pattern).
+------------------------------------------------------------- */
+export function RotatingWord({
+  words,
+  className,
+  holdMs = 2200,
+}: {
+  words: readonly string[];
+  className?: string;
+  holdMs?: number;
+}) {
+  const [index, setIndex] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -80px 0px" });
+
+  useEffect(() => {
+    if (!inView) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % words.length);
+    }, holdMs);
+    return () => clearInterval(id);
+  }, [inView, words.length, holdMs]);
+
+  return (
+    <span
+      ref={ref}
+      className={clsx("relative inline-block overflow-hidden align-bottom", className)}
+      style={{ color: "var(--color-brand-2)" }}
+    >
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={inView ? words[index] : "idle"}
+          className="inline-block"
+          initial={{ y: "110%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          exit={{ y: "-110%", opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {inView ? words[index] : words[0]}
+        </motion.span>
+      </AnimatePresence>
     </span>
   );
 }
@@ -129,24 +208,22 @@ export function ArrowButton({
   children,
   href = "#",
   tone = "light",
+  onClick,
 }: {
   children: ReactNode;
   href?: string;
   tone?: "light" | "dark";
+  onClick?: () => void;
 }) {
-  return (
-    <motion.a
-      href={href}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: "spring", stiffness: 380, damping: 26 }}
-      className={clsx(
-        "group inline-flex items-center gap-3 rounded-full py-2 pl-6 pr-2 text-sm font-medium",
-        tone === "light"
-          ? "bg-paper text-brand-deep shadow-[0_18px_50px_-18px_rgba(0,224,255,0.55)]"
-          : "bg-ink-3 text-paper ring-1 ring-brand-soft/25"
-      )}
-    >
+  const className = clsx(
+    "group inline-flex items-center gap-3 rounded-full py-2 pl-6 pr-2 text-sm font-medium",
+    tone === "light"
+      ? "bg-paper text-brand-deep shadow-[0_18px_50px_-18px_rgba(0,224,255,0.55)]"
+      : "bg-ink-3 text-paper ring-1 ring-brand-soft/25"
+  );
+
+  const inner = (
+    <>
       <span className="font-display text-base">{children}</span>
       <span
         className={clsx(
@@ -157,6 +234,35 @@ export function ArrowButton({
       >
         <Chevron />
       </span>
+    </>
+  );
+
+  // A click handler means the caller drives the behavior (e.g. opening a
+  // modal) instead of navigating, so this renders as a button, not a link.
+  if (onClick) {
+    return (
+      <motion.button
+        type="button"
+        onClick={onClick}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 380, damping: 26 }}
+        className={className}
+      >
+        {inner}
+      </motion.button>
+    );
+  }
+
+  return (
+    <motion.a
+      href={href}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 380, damping: 26 }}
+      className={className}
+    >
+      {inner}
     </motion.a>
   );
 }

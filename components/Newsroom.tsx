@@ -36,6 +36,29 @@ function distributeIntoColumns(items: PressItem[], cols: number) {
   return columns;
 }
 
+/**
+ * Round-robins Awards / Press / Talks in source order so "All coverage"
+ * doesn't front-load whichever category happens to dominate the array
+ * (Press, in practice) and push the rest past the first few "Show more"
+ * pages.
+ */
+function interleaveByCategory(items: PressItem[]) {
+  const groups = new Map<string, PressItem[]>();
+  for (const item of items) {
+    const g = groups.get(item.category);
+    if (g) g.push(item);
+    else groups.set(item.category, [item]);
+  }
+  const buckets = Array.from(groups.values());
+  const interleaved: PressItem[] = [];
+  for (let i = 0; interleaved.length < items.length; i++) {
+    for (const bucket of buckets) {
+      if (i < bucket.length) interleaved.push(bucket[i]);
+    }
+  }
+  return interleaved;
+}
+
 function useColumnCount() {
   const [cols, setCols] = useState(4);
   useEffect(() => {
@@ -72,15 +95,14 @@ export default function Newsroom() {
 
   const featured = useMemo(() => press.filter((p) => p.featured), []);
 
-  const rest = useMemo(
-    () =>
-      press.filter((p) => {
-        if (p.featured) return false;
-        if (filter === "All") return true;
-        return p.category === filter;
-      }),
-    [filter]
-  );
+  const rest = useMemo(() => {
+    const items = press.filter((p) => {
+      if (p.featured) return false;
+      if (filter === "All") return true;
+      return p.category === filter;
+    });
+    return filter === "All" ? interleaveByCategory(items) : items;
+  }, [filter]);
 
   const shown = rest.slice(0, visible);
   const remaining = rest.length - shown.length;
