@@ -46,6 +46,15 @@ export default function PortfolioTabs({ projects }: { projects: Project[] }) {
 
   return (
     <div className="relative flex flex-col justify-center">
+      {/* preload every project's imagery up front so switching tabs never
+          shows a blank/loading image — by the time a card is clicked its
+          image is already in the browser cache */}
+      <div aria-hidden className="absolute h-0 w-0 overflow-hidden opacity-0">
+        {projects.map((p) => (
+          <Image key={p.image} src={p.image} alt="" width={1} height={1} priority />
+        ))}
+      </div>
+
       {/* ambient glow */}
       <div
         className="pointer-events-none absolute -inset-x-10 -top-16 -bottom-16 -z-10 opacity-60 blur-3xl"
@@ -122,6 +131,7 @@ export default function PortfolioTabs({ projects }: { projects: Project[] }) {
               fill
               sizes="(min-width:768px) 50vw, 100vw"
               className="object-cover"
+              priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/10" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-ink/10 md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-paper/5" />

@@ -3,8 +3,10 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useState } from "react";
 import { ArrowButton, Pill, Reveal, RotatingWord, Words } from "./ui";
-import DeliveryRail from "./DeliveryRail";
-import GlobeReach from "./GlobeReach";
+import dynamic from "next/dynamic";
+
+const DeliveryRail = dynamic(() => import("./DeliveryRail"), { ssr: false });
+const GlobeReach = dynamic(() => import("./GlobeReach"), { ssr: false });
 import ContactModal from "./ContactModal";
 import {
   whoWeAre,

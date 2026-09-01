@@ -75,6 +75,17 @@ export default function CountryPortfolio({ projects }: { projects: Project[] }) 
 
   return (
     <div className="lg:grid lg:grid-cols-[15rem_1fr] lg:gap-14 xl:grid-cols-[17rem_1fr]">
+      {/* preload every logo/flag up front so scrolling into a new country's
+          cards never shows them popping in unloaded */}
+      <div aria-hidden className="absolute h-0 w-0 overflow-hidden opacity-0">
+        {projects.map((p) => (
+          <Image key={`${p.client}-logo`} src={p.logo} alt="" width={1} height={1} priority />
+        ))}
+        {grouped.map((g) => (
+          <Image key={`${g.country}-flag`} src={g.flag} alt="" width={1} height={1} priority />
+        ))}
+      </div>
+
       {/* left rail — country index, sticky through the whole pinned scroll */}
       <div className="hidden lg:block">
         <div className="sticky top-32 flex flex-col gap-1">
