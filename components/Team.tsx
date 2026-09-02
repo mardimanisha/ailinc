@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { Pill, Reveal, Tilt, Words } from "./ui";
-import { founders, trainers } from "@/lib/content";
+import { advisors, founders, trainers } from "@/lib/content";
 
 export default function Team() {
   return (
     <section
       id="team"
+      data-brand-theme="light"
       className="grain relative z-60 bg-paper pt-36 pb-24 text-brand-deep sm:pt-44 sm:pb-32"
     >
       <div
@@ -46,6 +47,19 @@ export default function Team() {
                     <p className="mt-4 max-w-[40ch] text-sm leading-relaxed text-paper-2/55">
                       {f.body}
                     </p>
+                    {f.linkedin && (
+                      <a
+                        href={f.linkedin}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-paper/10 px-4 py-2 text-xs font-medium text-paper transition-colors duration-300 hover:bg-paper/20"
+                      >
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="size-3.5">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.558V9h3.556v11.452z" />
+                        </svg>
+                        LinkedIn
+                      </a>
+                    )}
                   </div>
                 </article>
               </Tilt>
@@ -53,11 +67,106 @@ export default function Team() {
           ))}
         </div>
 
+        {/* advisory */}
+        <div className="mt-28">
+          <Pill tone="light">Advisory</Pill>
+          <h2 className="display mt-7 max-w-[20ch] text-[clamp(2.2rem,5vw,3.6rem)]">
+            <Words text="Advisors guiding our strategy and growth" italic={["growth"]} />
+          </h2>
+
+          <div className="mt-14 grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {advisors.map((t, i) => (
+              <Reveal key={t.name} delay={(i % 6) * 0.08} className="h-full">
+                <Tilt strength={3} className="h-full">
+                  <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[20px] bg-white p-4 ring-1 ring-brand-deep/10 shadow-[0_18px_50px_-34px_rgba(10,18,40,0.5)] transition-shadow duration-500 hover:shadow-[0_28px_70px_-32px_rgba(35,86,214,0.45)] sm:p-6">
+                    {/* brand hairline that draws itself in on hover */}
+                    <span
+                      className="pointer-events-none absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-700 ease-out-expo group-hover:scale-x-100"
+                      style={{ background: "var(--brand-grad)" }}
+                    />
+
+                    <header className="flex items-start gap-3 sm:gap-4">
+                      <div
+                        className="relative size-12 shrink-0 rounded-full p-[2px] sm:size-16"
+                        style={{ background: "var(--brand-grad)" }}
+                      >
+                        <div className="relative size-full overflow-hidden rounded-full ring-2 ring-white">
+                          <Image
+                            src={t.photo}
+                            alt={t.name}
+                            fill
+                            sizes="64px"
+                            className="object-cover transition-transform duration-[900ms] group-hover:scale-105"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="min-w-0 pt-1.5">
+                        <h3 className="display truncate text-base leading-tight text-brand-deep sm:text-[1.2rem]">
+                          {t.name}
+                        </h3>
+                        <p className="mt-1 truncate text-xs text-brand-deep/55">{t.title}</p>
+                      </div>
+
+                      {t.rating && (
+                        <span className="ml-auto shrink-0 rounded-full bg-brand-deep px-2 py-1 text-[10px] font-medium tracking-wide text-paper sm:px-2.5 sm:text-[11px]">
+                          ★ {t.rating}
+                        </span>
+                      )}
+                    </header>
+
+                    <p className="mt-4 text-sm font-semibold leading-snug text-brand-deep sm:mt-5">
+                      {t.specialization}
+                    </p>
+
+                    <div className="mt-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <span className="rounded-full bg-brand/8 px-2 py-1 eyebrow text-brand ring-1 ring-brand/15 sm:px-2.5">
+                        {t.experience}
+                      </span>
+                      {t.location && (
+                        <span className="rounded-full bg-ink/5 px-2 py-1 eyebrow text-brand-deep/55 ring-1 ring-brand-deep/10 sm:px-2.5">
+                          {t.location}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* flex-1 absorbs the row's spare height so the CTA below
+                        lands on the same line across every card */}
+                    <ul className="mt-4 flex-1 space-y-2 border-t border-brand-deep/10 pt-4 text-[13px] leading-relaxed text-brand-deep/65 sm:mt-5">
+                      {t.achievements.map((a) => (
+                        <li key={a} className="flex gap-2.5">
+                          <span
+                            className="mt-[7px] size-1.5 shrink-0 rounded-full"
+                            style={{ background: "var(--brand-grad)" }}
+                          />
+                          <span>{a}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <a
+                      href={t.linkedin}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-brand-deep px-4 py-2 text-xs font-medium text-paper transition-colors duration-300 hover:bg-brand sm:mt-6"
+                    >
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="size-3.5">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.558V9h3.556v11.452z" />
+                      </svg>
+                      LinkedIn
+                    </a>
+                  </article>
+                </Tilt>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
         {/* trainers */}
         <div className="mt-28">
-          <Pill tone="light">Trainers</Pill>
-          <h2 className="display mt-7 max-w-[20ch] text-[clamp(2.2rem,5vw,3.6rem)]">
-            <Words text="Trainers who've shipped at the companies they teach about" italic={["about"]} />
+          <Pill tone="light">Practitioners</Pill>
+          <h2 className="display mt-7 max-w-[22ch] text-[clamp(2.2rem,5vw,3.6rem)]">
+            <Words text="People who made it happen at the companies they teach about" italic={["about"]} />
           </h2>
 
           {/* `items-stretch` + `h-full` on every wrapper: the article can only
@@ -138,16 +247,10 @@ export default function Team() {
                       rel="noreferrer noopener"
                       className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-brand-deep px-4 py-2 text-xs font-medium text-paper transition-colors duration-300 hover:bg-brand sm:mt-6"
                     >
-                      LinkedIn
-                      <svg viewBox="0 0 24 24" fill="none" className="size-3.5">
-                        <path
-                          d="M7 17 17 7m0 0H8m9 0v9"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="size-3.5">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.558V9h3.556v11.452z" />
                       </svg>
+                      LinkedIn
                     </a>
                   </article>
                 </Tilt>

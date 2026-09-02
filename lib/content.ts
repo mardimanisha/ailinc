@@ -542,12 +542,14 @@ export const founders = [
     role: "Co-Founder & CEO",
     body: "Eight years at Microsoft across AI and cloud systems. Leads technology delivery and client partnerships.",
     image: "/trainers/shubham_lal.jpg",
+    linkedin: "https://www.linkedin.com/in/shubhamlal/",
   },
   {
     name: "Sandeep Volam",
     role: "Co-Founder & Chairman",
     body: "Leads corporate governance, people operations and commercial expansion across the Gulf region.",
     image: "/team/sandeep_volam.jpg",
+    linkedin: "https://www.linkedin.com/in/sandeep-volam-6237893/",
   },
 ];
 
@@ -853,6 +855,9 @@ export const trainers = [
     linkedin: "https://www.linkedin.com/in/rajesh-talreja-91891671/",
     achievements: ["End-to-end product development expertise"],
   },
+];
+
+export const advisors = [
   {
     name: "Guntuka Sekhar Reddy",
     title: "Director of Business Development and Franchise Operations",
@@ -869,20 +874,49 @@ export const trainers = [
     ],
   },
   {
-    name: "Kranthi Priya",
-    title: "Chief Business Head (Technical)",
-    experience: "Managing Partner at IGNAI (2018–2025)",
-    photo: "/trainers/Kranthi_Priya.jpeg",
-    specialization:
-      "Educational Technology | Child Development | New Business Development | Marketing Strategy",
+    name: "Dr. Srinivas Kaveti",
+    title: "International Lawyer",
+    experience: "35+ years",
+    photo: "/team/srinivas_kaveti.jpg",
+    specialization: "International & AI Law",
+    rating: null,
+    location: "USA, UK & India",
+    linkedin:
+      "https://www.linkedin.com/in/dr-srinivas-kaveti?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    achievements: [
+      "Doctorate in Law (Artificial Intelligence)",
+      "Vice President at Ramseyer & Associates, USA",
+      "Media legal expert on national & international TV",
+    ],
+  },
+  {
+    name: "Nomaan Abdul Majeed",
+    title: "CMO International",
+    experience: "20+ years",
+    photo: "/team/nomaan_abdul_majeed.jpg",
+    specialization: "International Marketing & Entrepreneurship",
     rating: null,
     location: "Hyderabad, India",
     linkedin:
-      "https://www.linkedin.com/in/kranthi-priya-aa00a2123?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "https://www.linkedin.com/in/nomaan-abdul-majeed-7051645?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     achievements: [
-      "EdTech Innovator shaping future-ready kids",
-      "Marketing, Sales & Analytics — Indian School of Business (Grade A · 97%)",
-      "Integrating technology with child development principles",
+      "Empowering student startups & entrepreneurship ecosystem",
+      "Strategic advisor at Lords Institute of Engineering",
+    ],
+  },
+  {
+    name: "Ganesh Rayala",
+    title: "Tech Entrepreneur",
+    experience: "15+ years",
+    photo: "/team/ganesh_rayala.jpg",
+    specialization: "Technology Solutions & Business Strategy",
+    rating: null,
+    location: "Hyderabad, India",
+    linkedin:
+      "https://www.linkedin.com/in/ganesh-rayala-4ab96a7?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    achievements: [
+      "Founded Luvetha Tech Solutions Pvt. Ltd.",
+      "Siddhartha Institute of Engineering graduate",
     ],
   },
 ];

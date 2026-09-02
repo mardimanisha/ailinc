@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 
@@ -50,6 +51,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${instrument.variable} ${inter.variable}`}>
       <body>
+        {/* Every section's entrance animation is gated behind
+            IntersectionObserver, which only starts reporting once React
+            hydrates. If the browser restores a mid-page scroll position on
+            reload, everything below the fold sits at its hidden initial
+            state for the whole hydration window, so refreshing anywhere
+            but the top flashes an almost-blank page. Landing here always
+            at the top sidesteps that entirely. */}
+        <Script id="reset-scroll" strategy="beforeInteractive">
+          {`try { history.scrollRestoration = "manual"; window.scrollTo(0, 0); } catch (e) {}`}
+        </Script>
         <SmoothScroll />
         {children}
       </body>
